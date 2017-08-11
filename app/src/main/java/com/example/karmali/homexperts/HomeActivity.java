@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
         {
             Intent intent = new Intent(HomeActivity.this, ShowLocationSettingActivity.class);
             startActivity(intent);
+            finish();
         }
         else
         {

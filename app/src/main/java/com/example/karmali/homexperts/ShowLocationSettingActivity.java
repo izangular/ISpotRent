@@ -81,6 +81,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                             // requests here.
                             Intent userLocationActivity = new Intent(ShowLocationSettingActivity.this, UserLocationActivity.class);
                             startActivity(userLocationActivity);
+                            finish();
 
                             break;
                     }
@@ -177,6 +178,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
             else {
                 Intent userLocationActivity = new Intent(this, UserLocationActivity.class);
                 startActivity(userLocationActivity);
+                finish();
             }
             /*
             mFusedLocationClient.getLastLocation()
@@ -211,7 +213,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     //Toast.makeText(this, "if block", Toast.LENGTH_LONG).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowLocationSettingActivity.this);
                     builder.setTitle("Need Location Permission");
-                    builder.setMessage("This app needs to access your location.");
+                    builder.setMessage("HomeXperts needs to access your location.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

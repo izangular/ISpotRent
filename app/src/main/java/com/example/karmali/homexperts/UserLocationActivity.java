@@ -1,7 +1,16 @@
 package com.example.karmali.homexperts;
 
+import android.*;
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
@@ -10,8 +19,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +54,10 @@ import java.util.Date;
 
 public class UserLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final int REQUEST_PERMISSION_SETTING = 101;
+    private boolean sentToSettings = false;
+    private SharedPreferences permissionStatus;
+
     private AddressResultReceiver mResultReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
     TextView txtCurrentAddress;
@@ -56,23 +75,35 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_location);
 
+        permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mResultReceiver = new AddressResultReceiver(null);
-        txtCurrentAddress = (TextView)findViewById(R.id.textViewCurrentAddress);
+        txtCurrentAddress = ((AppCompatActivity) this).findViewById(R.id.textViewCurrentAddress);
         //mLocationLatLong=new LatLng(0,0);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageViewClickPic);
+        ImageView imageView = ((AppCompatActivity) this).findViewById(R.id.imageViewClickPic);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ImageView imgview = (ImageView)view;
                 if(imgview.getDrawable()!=null) {
-                   // capturePictureIntent();
-                    Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
-                    startActivity(showImageActivity);
+                    //capturePictureIntent();
+                    if(checkCameraPermission()) {
+                        Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                        startActivity(showImageActivity);
+                    }else {
+                        getCameraPermission();
+                        if(checkCameraPermission()){
+                            Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                            startActivity(showImageActivity);
+                        }
+
+                    }
                 }
             }
         });
+
+        mBackButtonFlagHandler =new Handler();
 
         getCurrentLocation();
 
@@ -82,32 +113,36 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    mLocationCallback = new LocationCallback() {
-                        @Override
-                        public void onLocationResult(LocationResult locationResult) {
-                            for (Location location : locationResult.getLocations()) {
-                                // Update UI with location data
-                                mCurrentLocation = location;
+                try {
+                    for (Location location : locationResult.getLocations()) {
+                        // Update UI with location data
+                        mLocationCallback = new LocationCallback() {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                for (Location location : locationResult.getLocations()) {
+                                    // Update UI with location data
+                                    mCurrentLocation = location;
                                 /*if (mCurrLocationMarker != null) {
                                     mCurrLocationMarker.remove();
                                 }*/
-                                startGeocoderIntentService(location.getLatitude(),location.getLongitude());
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        setCurrentLocationOnMap();
-                                    }
-                                });
+                                    startGeocoderIntentService(location.getLatitude(), location.getLongitude());
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            setCurrentLocationOnMap();
+                                        }
+                                    });
+                                }
                             }
+
+                            ;
                         };
-                    };
+                    }
+                }catch (Exception ex){
+                    Toast.makeText(getBaseContext(), "Error getting location"+ex.toString(), Toast.LENGTH_LONG).show();
                 }
             };
         };
-
-
     }
 
 
@@ -235,11 +270,15 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                             //ImageView imageView = (ImageView)findViewById(R.id.imageView);
                             //imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 300, false));
 
+                            /*
                             Intent appraiseActivity = new Intent(this, AppraisalActivity.class);
-                            //Bundle bun = new Bundle();
-                            //bun.putString("PhotoUrl");
                             appraiseActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
                             startActivity(appraiseActivity);
+                            */
+                            //show image activity
+                            Intent showImageActivity = new Intent(this, AppraisalActivity.class);
+                            showImageActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
+                            startActivity(showImageActivity);
                         }
                     }
                     catch (Exception e) {
@@ -276,7 +315,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void setCurrentLocationOnMap() {
-        if (mCurrentLocation != null) {
+        if (mGoogleMap!=null&&mCurrentLocation != null) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 14);
             if (mCurrLocationMarker != null)
@@ -335,7 +374,6 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-
     boolean backPressedOnce=false;
     private Handler mBackButtonFlagHandler;
     private final Runnable mBackButtonFlagRunnable=new Runnable() {
@@ -351,19 +389,85 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
             backPressedOnce = true;
             Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    backPressedOnce=false;
-                }
-            }, 2000);
+            mBackButtonFlagHandler.postDelayed(mBackButtonFlagRunnable,2000);
         }
         else {
-
+            super.onBackPressed();
+            return;
         }
-
-
-
     }
 
+
+    private void getCameraPermission(){
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                //request the missing permissions
+                if (ActivityCompat.shouldShowRequestPermissionRationale(UserLocationActivity.this, Manifest.permission.CAMERA)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UserLocationActivity.this);
+                    builder.setTitle("Need Camera Permission");
+                    builder.setMessage("HomeXperts needs to access your Camera.");
+                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            ActivityCompat.requestPermissions(UserLocationActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_SETTING);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
+                } else if (permissionStatus.getBoolean(Manifest.permission.CAMERA,false)) {
+                    //Here, only 1 check is enough beacuse we have set flag based on location request response
+                    //Previously Permission Request was cancelled with 'Don't Ask Again',
+                    // Redirect to Settings after showing Information about why you need the permission
+
+                    //Toast.makeText(this, "Check permission: Else if block", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UserLocationActivity.this);
+                    builder.setTitle("Need Camera permission");
+                    builder.setMessage("HomeXperts needs to access your Camera.");
+                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            sentToSettings = true;
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                            //Toast.makeText(getBaseContext(), "Go to Permissions to Grant Location access", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
+                } else {
+                    //just request the permission
+                    //Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(UserLocationActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_SETTING);
+                }
+
+                SharedPreferences.Editor editor = permissionStatus.edit();
+                editor.putBoolean(Manifest.permission.ACCESS_FINE_LOCATION,true);
+                editor.commit();
+
+            }
+        }
+        catch  (Exception ex) {
+            Toast.makeText(this, "Exception: "+ex.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean checkCameraPermission(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+            return true;
+        else return false;
+    }
 }

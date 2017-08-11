@@ -1,17 +1,8 @@
 <resources>
     <string name="app_name">HomeXperts</string>
     <string name="google_map_api_key">AIzaSyBUJXJGghtR5vTFeIFAljrdKtEdd4aqWeM</string>
-    <string name="toggle_turn_off">Condominium</string>
-    <string name="toggle_turn_on">Single Family House</string>
 
-    <string-array name="android_dropdown_arrays">
-        <item>Choose a Item</item>
-        <item>Drop Down List 1</item>
-        <item>Drop Down List 2</item>
-        <item>Drop Down List 3</item>
-        <item>Drop Down List 5</item>
-        <item>Drop Down List 6</item>
-        <item>Drop Down List 7</item>
-        <item>Drop Down List 8</item>
-    </string-array>
- </resources>
+    <string name="title_activity_show_image">ShowImageActivity</string>
+    <string name="buttonConfirmImage">Confirm Image</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>

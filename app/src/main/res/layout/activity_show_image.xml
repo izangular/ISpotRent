@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.karmali.homexperts.ShowImageActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:id="@+id/relativeLayout">
+
+        <ImageView
+            android:id="@+id/gotoloacationactivity"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/arrowback" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/settings"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/logoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1.74"
+            android:text="homeXperts"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageViewCapturedImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/relativeLayout"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/buttonConfirmImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccent"
+        android:text="Confirm" />
+
+
+
+</RelativeLayout>

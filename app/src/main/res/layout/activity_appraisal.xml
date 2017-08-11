@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    tools:context="com.example.karmali.homexperts.AppraisalActivity"
+    android:orientation="vertical"
+    android:background="#fff">
+
+   <!-- <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#fff"
+        android:weightSum="1">
+    <ImageView
+        android:id="@+id/gotoloacationactivity"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/arrowback"/>
+    <TextView
+    android:layout_width="309dp"
+    android:layout_height="wrap_content"
+    android:text="homeXperts"
+    android:id="@+id/logoTitle"
+    android:textAlignment="center"
+    android:textColor="@color/colorPrimary"
+    android:textSize="20dp"
+    android:layout_marginTop="5dp"
+        android:layout_weight="1.74" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="2dp"
+            android:layout_gravity="right"
+            android:src="@drawable/settings"/>
+    </LinearLayout>
+    <ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff">
+
+<LinearLayout
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical"
+    android:background="#fff"
+   >
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        tools:context="com.example.karmali.homexperts.AppraisalActivity"
+        >
+
+    <ImageView
+        android:id="@+id/capturedImageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/addressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_margin="1dp"
+            android:paddingBottom="5dp"
+            android:alpha="0.7"
+            android:paddingLeft="5dp"
+            android:paddingTop="2dp"
+            android:text="Address:"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            />
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignLeft="@+id/capturedImageView"
+        android:layout_alignBottom="@+id/capturedImageView"
+        android:alpha="0.7"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dp"
+        >
+           <TextView
+            android:id="@+id/extimatedPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_margin="1dp"
+            android:text="Est.Value:"
+               android:textSize="16dp"
+               android:ellipsize="end"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+               />
+        <TextView
+            android:id="@+id/textViewAppraiseValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity= "center_horizontal"
+            android:ellipsize="end"
+            android:textColor="@color/colorAccent"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="1dp"
+            android:layout_alignBaseline="@+id/extimatedPrice"
+            android:layout_alignBottom="@+id/extimatedPrice"
+            android:layout_toEndOf="@+id/extimatedPrice" />
+    </RelativeLayout>
+    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/formSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:orientation="vertical">
+
+
+             <TextView
+        android:id="@+id/housetype"
+        android:layout_weight="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#000"
+        android:text="House Type" />
+             <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+       <Button
+            android:id="@+id/buttonA2"
+           android:layout_width="0dp"
+           android:layout_weight="0.5"
+            android:layout_height="30dp"
+            android:textColor="@color/white"
+            android:background="@color/colorAccent"
+            android:text="Single Family House"/>
+
+        <Button
+            android:id="@+id/buttonA3"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="30dp"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/borderbottom"
+            android:text="Condominium" />
+    </LinearLayout>
+
+
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:paddingTop="10dp"
+        >
+
+        <TextView
+            android:id="@+id/objectType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Property Year"
+            android:textColor="#000"
+            android:textSize="@dimen/text_big" />
+
+        <RelativeLayout
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/spinnerstyle">
+
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/android_dropdown_arrays"
+                android:padding="5dp" />
+
+        </RelativeLayout>
+
+        <!--    <Spinner
+            android:id="@+id/yearspin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:popupElevation="@dimen/app_bar_height"
+            android:popupBackground="#0000"
+            style="@android:style/Widget.Holo.Light.Spinner"-->
+
+
+    </LinearLayout>
+
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/textViewLivSurf"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="@dimen/text_big"
+            android:text="Net living area (m2)" />
+
+        <TextView
+            android:id="@+id/textViewLivSurfVal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textSize="@dimen/text_big"
+            android:textColor="#000"
+            android:text="0"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
+        <TextView
+            android:id="@+id/textViewLivSurfRangeLow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="5dp"
+            android:textColor="#000"
+            android:text="1"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/textViewLivSurfRangeHigh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="5dp"
+            android:gravity="end"
+            android:textColor="#000"
+            android:text="500"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+
+             <SeekBar
+        android:id="@+id/seekBarLivSurf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="10"
+        android:max="500"/>
+
+             <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/textViewRooms"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="@dimen/text_big"
+            android:text="Rooms" />
+
+        <TextView
+            android:id="@+id/textViewRoomsVal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textColor="#000"
+            android:textSize="@dimen/text_big"
+            android:text="0"
+            android:textStyle="bold" />
+    </LinearLayout>
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
+        <TextView
+            android:id="@+id/textViewRoomsRangeLow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="5dp"
+            android:textColor="#000"
+            android:text="1"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/textViewRoomsRangeHigh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="5dp"
+            android:textColor="#000"
+            android:gravity="end"
+            android:text="15"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+            <SeekBar
+        android:id="@+id/seekBarRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="15"/>
+
+             <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:orientation="horizontal"
+      android:padding="5dp">
+
+        <TextView
+          android:id="@+id/textViewBathrooms"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Build Year"
+          android:textColor="#000"
+          android:textSize="@dimen/text_big" />
+
+        <RelativeLayout
+            android:id="@+id/speaker_relative_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/spinnerstyle">
+
+            <Spinner
+                android:id="@+id/yearspin"
+                style="@style/Widget.AppCompat.Spinner.DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:spinnerMode="dropdown"
+                android:scrollbars="none"
+                android:overlapAnchor="false"
+                android:dropDownWidth="match_parent"
+                />
+
+        </RelativeLayout>
+
+        <!--    <Spinner
+            android:id="@+id/yearspin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:popupElevation="@dimen/app_bar_height"
+            android:popupBackground="#0000"
+            style="@android:style/Widget.Holo.Light.Spinner"-->
+
+        android:layout_weight="0.66" />
+  </LinearLayout>
+
+
+            <CheckBox
+        android:id="@+id/lift"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Lift"
+        android:maxLines="1"
+        android:textColor="#000"
+        app:buttonTint="@color/colorPrimary" />
+
+            <Button
+        android:id="@+id/buttonAppraise"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:text="Estimate"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:background="@drawable/button"/>
+        </LinearLayout>
+
+ </LinearLayout>
+
+</ScrollView>
+
+
+</LinearLayout>

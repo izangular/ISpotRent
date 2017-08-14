@@ -97,6 +97,7 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
     }
+
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -159,6 +160,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     protected void takePicture() {
+
         if(null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null");
             return;
@@ -327,6 +329,7 @@ public class CameraActivity extends AppCompatActivity {
             }, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Error occurred in createCameraPreview "+e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -360,6 +363,7 @@ public class CameraActivity extends AppCompatActivity {
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Error occurred in openCamera "+e.toString(), Toast.LENGTH_SHORT).show();
         }
         Log.e(TAG, "openCamera X");
     }
@@ -377,13 +381,18 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void closeCamera() {
-        if (null != cameraDevice) {
-            cameraDevice.close();
-            cameraDevice = null;
+        try {
+            if (null != cameraDevice) {
+                cameraDevice.close();
+                cameraDevice = null;
+            }
+            if (null != imageReader) {
+                imageReader.close();
+                imageReader = null;
+            }
         }
-        if (null != imageReader) {
-            imageReader.close();
-            imageReader = null;
+        catch(Exception ex){
+            Toast.makeText(this, "Error occurred in closeCamera "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -392,7 +401,7 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // close the app
-                Toast.makeText(CameraActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(CameraActivity.this, "You cannot use HomeXperts without granting camera permission", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -400,12 +409,17 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume");
-        startBackgroundThread();
-        if (textureView.isAvailable()) {
-            openCamera();
-        } else {
-            textureView.setSurfaceTextureListener(textureListener);
+        try {
+            Log.e(TAG, "onResume");
+            startBackgroundThread();
+            if (textureView.isAvailable()) {
+                openCamera();
+            } else {
+                textureView.setSurfaceTextureListener(textureListener);
+            }
+        }
+        catch(Exception ex){
+            Toast.makeText(this, "Error occurred in onResume "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
     tools:context="com.example.karmali.homexperts.AppraisalActivity"
     android:orientation="vertical"
     android:background="#fff">
-
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,45 +14,62 @@
         android:orientation="horizontal"
         android:background="#fff"
         android:weightSum="1">
-        <ImageView
-            android:id="@+id/gotoloacationactivity"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="2dp"
-            android:src="@drawable/arrowback"/>
-        <TextView
-            android:layout_width="309dp"
-            android:layout_height="wrap_content"
-            android:text="homeXperts"
-            android:id="@+id/logoTitle"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1.74" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:id="@+id/relativeLayout"
+            android:padding="10dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="2dp"
-            android:layout_gravity="right"
+            <ImageView
+                android:id="@+id/gotoloacationactivity"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/arrowback" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/settings"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:id="@+id/logoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1.74"
+                android:text="homeXperts"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
             android:src="@drawable/settings"/>
     </LinearLayout>
+
     <ScrollView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ScrollView01"
         android:layout_width="fill_parent"
-        android:layout_height="500dp"
-        android:background="#fff">
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:orientation="vertical"
             android:background="#fff"
             >
+            <!--Image-->
             <RelativeLayout android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 tools:context="com.example.karmali.homexperts.AppraisalActivity"
@@ -124,28 +139,38 @@
 
             <LinearLayout
                 android:id="@+id/formSection"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#fcfcfc">
 
+                    <TextView
+                        android:id="@+id/housetype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="House Type"
+                        android:textColor="#000" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/housetype"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:text="House Type"
-                    android:textColor="#000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
                     android:textAllCaps="false"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
                     android:orientation="horizontal">
 
                     <Button
@@ -153,7 +178,7 @@
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
-                        android:background="@color/colorAccent"
+                        android:background="@drawable/spinnerstyle"
                         android:text="Single Family House"
                         android:textColor="@color/white" />
 
@@ -162,35 +187,57 @@
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
-                        android:background="@drawable/borderbottom"
+                        android:background="@drawable/roundedborder"
                         android:text="Condominium"
                         android:textColor="@color/colorAccent" />
                 </LinearLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="20dp"
                     android:background="@color/lighter_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:padding="5dp"
-                    >
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#fcfcfc">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Type of your property"
+                        android:layout_weight="1"
+                        android:textColor="#000" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/objectType"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Property Type"
                         android:textColor="#000" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40dp"
+                        android:layout_weight="1"
                         android:background="@drawable/spinnerstyle">
 
 
@@ -219,14 +266,17 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="20dp"
                     android:background="@color/lighter_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#fcfcfc">
 
                     <TextView
                         android:id="@+id/textViewLivSurf"
@@ -234,8 +284,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Net living area (m2)"
-                        android:textColor="#000"
-                        />
+                        android:textColor="#000" />
 
                     <TextView
                         android:id="@+id/textViewLivSurfVal"
@@ -253,14 +302,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="0dp">
+                    android:layout_marginTop="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp">
 
                     <TextView
                         android:id="@+id/textViewLivSurfRangeLow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingStart="5dp"
                         android:text="1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
@@ -279,23 +331,25 @@
 
                 <SeekBar
                     android:id="@+id/seekBarLivSurf"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:max="500"
-                    android:progress="10" />
+                    android:layout_marginStart="4dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="5dp"
                     android:background="@color/lighter_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#fcfcfc">
 
                     <TextView
                         android:id="@+id/textViewRooms"
@@ -303,8 +357,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Rooms"
-                        android:textColor="#000"
-                        android:textSize="@dimen/text_big" />
+                        android:textColor="#000"/>
 
                     <TextView
                         android:id="@+id/textViewRoomsVal"
@@ -321,14 +374,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="0dp">
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
+                    android:layout_marginTop="20dp">
 
                     <TextView
                         android:id="@+id/textViewRoomsRangeLow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingStart="5dp"
                         android:text="1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
@@ -345,58 +401,73 @@
                         android:textSize="@dimen/text_small" />
                 </LinearLayout>
 
+
                 <SeekBar
                     android:id="@+id/seekBarRooms"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:max="15" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="5dp"
                     android:background="@color/lighter_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:paddingTop="10dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#fcfcfc">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Year of construction or last major renovation"
+                        android:textColor="#000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp">
 
                     <TextView
                         android:id="@+id/textViewBathrooms"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Build Year"
                         android:textColor="#000" />
 
                     <RelativeLayout
                         android:id="@+id/speaker_relative_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="40dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@drawable/spinnerstyle">
 
                         <Spinner
                             android:id="@+id/yearspin"
                             style="@style/Widget.AppCompat.Spinner.DropDown"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
                             android:dropDownWidth="match_parent"
                             android:overlapAnchor="false"
                             android:scrollbars="none"
                             android:spinnerMode="dropdown" />
 
                     </RelativeLayout>
-
-                    <!--    <Spinner
-                    android:id="@+id/yearspin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:popupElevation="@dimen/app_bar_height"
-                    android:popupBackground="#0000"
-                    style="@android:style/Widget.Holo.Light.Spinner"-->
                 </LinearLayout>
 
                 <View
@@ -412,22 +483,25 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Lift"
+                    android:layout_marginStart="10dp"
                     android:textColor="#000"
                     app:buttonTint="@color/colorPrimary" />
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/buttonAppraise"
+                android:layout_width="match_parent"
+                android:layout_height="39dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button"
+                android:text="Estimate" />
+
         </LinearLayout>
 
-    </ScrollView>
 
-    <Button
-        android:id="@+id/buttonAppraise"
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button"
-        android:padding="5dp"
-        android:text="Estimate" />
+
+
+    </ScrollView>
 
 </LinearLayout>

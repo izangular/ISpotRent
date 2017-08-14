@@ -107,6 +107,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     Button buttonA3, buttonA2, estimate;
     ArrayAdapter<String> adapter, adapterObjectType;
     private ProgressBar bar;
+
     Bitmap imageBitmap;
     ProgressDialog dialog;
     private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0";
@@ -126,6 +127,43 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appraisal);
 
+        dialog = new ProgressDialog(AppraisalActivity.this);
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        dialog.setMessage("");
+        dialog.show();
+        /*bar = (ProgressBar)findViewById(R.id.indeterminateBar);
+        bar.isShown();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();*/
         Bundle bun = getIntent().getExtras();
         String savedImageUrl = bun.getString("PhotoUrl");
         fillImageView(savedImageUrl);
@@ -256,6 +294,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
+    }
 
     public void goToLocation()
     {
@@ -447,30 +490,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
 
                                 txtAppraisePrice.setText(appvalue);
-                                //  findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                                dialog.dismiss();
 
 
                             }
                         });
 
-
-
-    /*                    mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    JSONObject jsonResponse = new JSONObject(myResponse);
-
-                                    Toast.makeText(FormActivity.this,jsonResponse.toString(),Toast.LENGTH_SHORT).show();
-                                }
-                                catch(Exception e)
-                                {
-                                    Toast.makeText(FormActivity.this, "2. Error", Toast.LENGTH_SHORT).show();
-                                    Log.i("error",e.getMessage());
-                                }
-
-                            }
-                        });*/
                     }
                     catch(Exception e)
                     {

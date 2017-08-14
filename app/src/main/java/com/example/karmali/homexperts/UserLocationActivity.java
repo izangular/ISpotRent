@@ -60,7 +60,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
 
     private AddressResultReceiver mResultReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
-    TextView txtCurrentAddress;
+    //TextView txtCurrentAddress;
 
     //private LatLng mLocationLatLong;
     private GoogleMap mGoogleMap;
@@ -78,7 +78,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mResultReceiver = new AddressResultReceiver(null);
-        txtCurrentAddress = ((AppCompatActivity) this).findViewById(R.id.textViewCurrentAddress);
+        //txtCurrentAddress = ((AppCompatActivity) this).findViewById(R.id.textViewCurrentAddress);
         //mLocationLatLong=new LatLng(0,0);
 
         ImageView imageView = ((AppCompatActivity) this).findViewById(R.id.imageViewClickPic);
@@ -289,14 +289,14 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private void displayAddress(Address address){
-        try {
-            txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
-        }
-        catch(Exception ex){
-            Toast.makeText(UserLocationActivity.this, "Exception displaying address: " + ex.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
+//    private void displayAddress(Address address){
+//        try {
+//            txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
+//        }
+//        catch(Exception ex){
+//            Toast.makeText(UserLocationActivity.this, "Exception displaying address: " + ex.toString(), Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -363,7 +363,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                             @Override
                             public void run() {
                                 //txtCurrentAddress.setText("Merces" + ", " + address.getPostalCode() + ", " + address.getLocality());
-                                displayAddress(address);
+                                //displayAddress(address);
                             }
                         }
                 );

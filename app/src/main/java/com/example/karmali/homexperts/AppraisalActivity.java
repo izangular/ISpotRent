@@ -63,6 +63,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
@@ -99,7 +100,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     MediaType JSON;
     private Request request;
     private Handler mHandler;
-    TextView txtAppraisePrice;
+    TextView txtAppraisePrice, txtAddress;
     TextView livserfacevalue, textViewRoomsVal;
     SeekBar  seekBarLivSurf, seekBarRooms,roomSeekBar,surfaceSeekBar;
     Spinner yearspin,objectTypeSpinner;
@@ -112,7 +113,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     ProgressDialog dialog;
     private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0";
 
-
+    String userAddress;
+    LatLng userAddressLatLng;
 
     private static final int REQUEST_CHECK_SETTINGS = 111;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -292,18 +294,33 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             }
         });
 
+        txtAddress = findViewById(R.id.addressText);
+        getAddress();
+        txtAddress.setText(userAddress);
+
+
+
     }
 
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        finish();
+    private void getAddress(){
+        final AddressGlobal addressGlobal = (AddressGlobal)getApplicationContext();
+        userAddress=addressGlobal.getAddress();
+        userAddressLatLng=addressGlobal.getAddresslatLng();
     }
 
     public void goToLocation()
     {
         Intent intent = new Intent(AppraisalActivity.this,UserLocationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         this.startActivity(intent);
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
     }
 
     //To display image

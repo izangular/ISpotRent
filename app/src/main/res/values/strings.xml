@@ -4,14 +4,26 @@
     <string name="toggle_turn_off">Condominium</string>
     <string name="toggle_turn_on">Single Family House</string>
 
-    <string-array name="android_dropdown_arrays">
-        <item>Choose a Item</item>
-        <item>Drop Down List 1</item>
-        <item>Drop Down List 2</item>
-        <item>Drop Down List 3</item>
-        <item>Drop Down List 5</item>
-        <item>Drop Down List 6</item>
-        <item>Drop Down List 7</item>
-        <item>Drop Down List 8</item>
+    <string-array name="android_dropdown_objectType">
+            <item >Normal Flat</item>
+            <item>Furnished Apartment</item>
+            <item>Duplex</item>
+            <item>Terrace Apartment</item>
+            <item>Penthhouse</item>
+            <item>Attic</item>
+            <item>Studio</item>
+            <item>Loft</item>
+            <item>House</item>
     </string-array>
+        <string-array name="android_dropdown_objectValue">
+            <item>21</item>
+            <item>15</item>
+            <item>13</item>
+            <item>1099</item>
+            <item>2</item>
+            <item>5</item>
+            <item>16</item>
+            <item>100</item>
+            <item>1199</item>
+        </string-array>
  </resources>

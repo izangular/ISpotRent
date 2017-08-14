@@ -3,6 +3,7 @@ package com.example.karmali.homexperts;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,6 +51,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -64,7 +66,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
-
+import android.app.ProgressDialog;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -87,30 +89,26 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.example.karmali.homexperts.R.id.buttonA2;
-import static com.example.karmali.homexperts.R.id.seekBarLivSurf;
-
-
 public class AppraisalActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
-    private String UrlRegister = "https://intservices.iazi.ch/api/apps/v1/defaultOfferedRentAppraisal";
+    private String UrlDefaultAppraise = "https://intservices.iazi.ch/api/apps/v1/defaultOfferedRentAppraisal";
     private String UrlAppraise ="https://intservices.iazi.ch/api/apps/v1/OfferedRentAppraisal";
     String deviceId;
     OkHttpClient okHttpClient;
     MediaType JSON;
     private Request request;
-    Dialog dialog;
     private Handler mHandler;
     TextView txtAppraisePrice;
     TextView livserfacevalue, textViewRoomsVal;
     SeekBar  seekBarLivSurf, seekBarRooms,roomSeekBar,surfaceSeekBar;
-    Spinner yearspin;
+    Spinner yearspin,objectTypeSpinner;
     CheckBox lift,liftCheckBox;
     Button buttonA3, buttonA2, estimate;
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapter, adapterObjectType;
+    private ProgressBar bar;
     Bitmap imageBitmap;
-
+    ProgressDialog dialog;
     private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0";
 
 
@@ -128,14 +126,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appraisal);
 
-
-
         Bundle bun = getIntent().getExtras();
         String savedImageUrl = bun.getString("PhotoUrl");
         fillImageView(savedImageUrl);
 
         yearspin = (Spinner) findViewById(R.id.yearspin);
-
+        objectTypeSpinner = (Spinner) findViewById(R.id.objectTypeSpinner);
         livserfacevalue = (TextView) findViewById(R.id.textViewLivSurfVal);
         seekBarLivSurf= (SeekBar) findViewById(R.id.seekBarLivSurf);
         textViewRoomsVal = (TextView) findViewById(R.id.textViewRoomsVal);
@@ -162,7 +158,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         spinYear.setAdapter(adapter);
 
 
-       /* Bitmap bitmap = (Bitmap) this.getIntent().getParcelableExtra("BitmapImage");
+        /* Bitmap bitmap = (Bitmap) this.getIntent().getParcelableExtra("BitmapImage");
 
         ImageView imageview = (ImageView) findViewById(R.id.capturedImageView);
         imageview.setImageBitmap(bitmap);*/
@@ -171,8 +167,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
 
-        buttonA2 = (Button) findViewById(R.id.buttonA2);
+      buttonA2 = (Button) findViewById(R.id.buttonA2);
         buttonA3 = (Button) findViewById(R.id.buttonA3);
+        buttonA2.setTransformationMethod(null);
+        buttonA3.setTransformationMethod(null);
         buttonA2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonA2.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
@@ -195,6 +193,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         estimate = (Button) findViewById(R.id.buttonAppraise);
         estimate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 AppraisalService();
             }
 
@@ -347,11 +346,14 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         }
         Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
 
-        Bitmap small = Bitmap.createScaledBitmap(imageBitmap, 450, 330, false);
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int nh = (int) ( imageBitmap.getHeight() * (512.0 / imageBitmap.getWidth()) );
+        Bitmap small = Bitmap.createScaledBitmap(imageBitmap, 512, nh, true);
         small.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray  = byteArrayOutputStream .toByteArray();
         String imageBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
 
         deviceId =  Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); ;// "123XGH67";
 
@@ -361,10 +363,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 .add("lng","8.5467016")
                 .add("deviceId",deviceId.toString())
                 .build();
-        request = new Request.Builder().url(UrlRegister).build();
+        request = new Request.Builder().url(UrlDefaultAppraise).build();
 
         request = new Request.Builder()
-                .url(UrlRegister)
+                .url(UrlDefaultAppraise)
                 .header("Accept","application/json")
                 .header("Content-Type","application/x-www-form-urlencoded")
                 .post(formBody)
@@ -386,22 +388,33 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
                         final String myResponse = response.body().string();
                         Log.i("IN", myResponse);
-
                         final JSONObject json =  new JSONObject(myResponse);
+                        final String category = json.getString("categoryCode");
+
+
+
                         final String appvalue = json.getString("appraisalValue");
                         final String surface = json.getString("surfaceContract");
                         final String liftValue = json.getString("lift");
-                        final String category = json.getString("categoryCode");
+                       // final String category = json.getString("categoryCode");
                         final String year = json.getString("buildYear");
                         final String roomNo = json.getString("roomNb");
+                        final String object = json.getString("objectType");
                         requestZip = json.getString("zip");
                         requestTown=json.getString("town");
                         requestStreet = json.getString("street");
 
-                                runOnUiThread(new Runnable() {
+                                 runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
+                                //Spinner For Object Type
+                                adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.android_dropdown_objectType));
+                                objectTypeSpinner.setAdapter(adapterObjectType);
+                                if (!object.equals(null)) {
+                                    int spinnerPosition = adapter.getPosition(object);
+                                    objectTypeSpinner.setSelection(spinnerPosition);
+                                }
 
                                 livserfacevalue.setText(surface);
                                 seekBarLivSurf.setProgress(Integer.parseInt(surface));
@@ -421,13 +434,13 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
                                 if(category.trim().equals(5))
                                 {
-                                    buttonA2.performClick();
+                                    //buttonA2.performClick();
                                     requestCategory = "5";
                                 }
 
                                 else
                                 {
-                                    buttonA3.performClick();
+                                    //buttonA3.performClick();
                                     requestCategory="6";
                                 }
 
@@ -488,11 +501,28 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         String buildYear = spinner.getSelectedItem().toString();
 
 
+        Spinner objectspinner = (Spinner)findViewById(R.id.objectTypeSpinner);
+        String objectType = objectspinner.getSelectedItem().toString();
+
+        //Spinner For Object Type
+        adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.android_dropdown_objectType));
+        objectTypeSpinner.setAdapter(adapterObjectType);
+
+        int spinnerPosition = adapterObjectType.getPosition(objectType);
+        objectTypeSpinner.setSelection(spinnerPosition);
+
+
+       // String items [] = getResources().getStringArray(R.array.android_dropdown_objectType);
+        String values [] =  getResources().getStringArray(R.array.android_dropdown_objectValue);
+
+        //String item = objectTypeSpinner.getItemAtPosition(spinnerPosition).toString();
+        String value = values [spinnerPosition];
+
         RequestBody appraiseData = new FormBody.Builder()
                 .add("ortId","35")
                 .add("externalKey","35")
                 .add("categoryCode",requestCategory)
-                .add("objectTypeCode","15")
+                .add("objectTypeCode",value)
                 .add("qualityMicro","3")
                 .add("surfaceContract",surfaceLiving.getText().toString())
                 .add("buildYear",buildYear)
@@ -531,6 +561,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         final String surface = json.getString("surfaceContract");
                         final String liftValue = json.getString("lift");
                         final String category = json.getString("categoryCode");
+                        final String object = json.getString("objectType");
                         final String year = json.getString("buildYear");
                         final String roomNo = json.getString("roomNb");
                         requestZip = json.getString("zip");
@@ -545,6 +576,17 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                 seekBarLivSurf.setProgress(Integer.parseInt(surface));
                                 textViewRoomsVal.setText(roomNo);
                                 seekBarRooms.setProgress(2);
+
+                                //Spinner For Object Type
+                                //adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.android_dropdown_objectType));
+                                //objectTypeSpinner.setAdapter(adapterObjectType);
+                                if (!object.equals(null)) {
+                                    int spinnerPosition = adapter.getPosition(object);
+                                    objectTypeSpinner.setSelection(spinnerPosition);
+                                }
+
+
+
                                 if (!year.equals(null)) {
                                     int spinnerPosition = adapter.getPosition(year);
                                     yearspin.setSelection(spinnerPosition);

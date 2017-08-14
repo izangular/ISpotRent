@@ -67,7 +67,7 @@
                     android:textSize="20sp"
                     android:ellipsize="end"
                     android:textColor="#FFF"
-                    android:paddingTop="10dp"
+                    android:paddingTop="5dp"
                     android:text="Click a photo of your property"
                     android:textStyle="bold"
                     android:textAlignment="center"

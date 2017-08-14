@@ -461,9 +461,9 @@
                             style="@style/Widget.AppCompat.Spinner.DropDown"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:dropDownWidth="match_parent"
                             android:overlapAnchor="false"
                             android:scrollbars="none"
+                            android:dropDownHeight="50dp"
                             android:spinnerMode="dropdown" />
 
                     </RelativeLayout>

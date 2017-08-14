@@ -123,6 +123,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     String userAddress;
     LatLng userAddressLatLng;
 
+    private static final int REQUEST_CHECK_SETTINGS = 111;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient mGoogleApiCLient;
     private static final int LOCATION_PERMISSION_CONSTANT = 100;
@@ -147,7 +148,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         Bundle bun = getIntent().getExtras();
         String savedImageUrl = bun.getString("PhotoUrl");
-        //fillImageView(savedImageUrl);
+        fillImageView(savedImageUrl);
 
         yearspin = (Spinner) findViewById(R.id.yearspin);
         objectTypeSpinner = (Spinner) findViewById(R.id.objectTypeSpinner);
@@ -192,7 +193,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         buttonA2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonA2.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
-                buttonA3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.borderbottom, null));
+                buttonA3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.roundedborder, null));
                 buttonA2.setTextColor(Color.WHITE);
                 buttonA3.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
                 requestCategory = "5";
@@ -202,7 +203,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         buttonA3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonA3.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
-                buttonA2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.borderbottom, null));
+                buttonA2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.roundedborder, null));
                 buttonA3.setTextColor(Color.WHITE);
                 buttonA2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
                 requestCategory = "6";
@@ -297,6 +298,23 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     public void onBackPressed(){
         super.onBackPressed();
         finish();
+    }
+
+    //To display image
+    private void fillImageView(String savedImageUrl) {
+        try {
+            Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
+            //Toast.makeText(this, "Data: " + tempUri.toString(), Toast.LENGTH_SHORT).show();
+            imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
+            ImageView imageView = (ImageView)findViewById(R.id.capturedImageView);
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 450, 330, false));
+            //imageView.setImageBitmap(imageBitmap);
+            //GetLocation();
+        }
+        catch (Exception ex)
+        {
+            Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void defaultAppraisal(String savedImageUrl) {
@@ -575,25 +593,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void getDeviceLocation() {
-        try {
-            Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
-            /*
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Toast.makeText(AppraisalActivity.this, "Hello Satvesh! Location- Lat: " + location.getLatitude() + " Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                    */
-        } catch (SecurityException ex) {
-
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -606,8 +605,79 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                     //Toast.makeText(getBaseContext(), "Permission granted", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        // All required changes were successfully made
+                        getDeviceLocation();//FINALLY YOUR OWN METHOD TO GET YOUR USER LOCATION HERE
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        // The user was asked to change settings, but chose not to
+
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case REQUEST_IMAGE_CAPTURE:
+                if(resultCode == RESULT_OK)
+                {
+                    try {
+
+                        //Toast.makeText(this, "Image capture activityResult", Toast.LENGTH_LONG).show();
+                        Uri tempUri=FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(mCurrentPhotoPath));
+                        //Toast.makeText(this, "Image Uri: "+tempUri.toString(), Toast.LENGTH_SHORT).show();
+                        Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
+
+                        //ivProfilePic.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
+                        //Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        if(imageBitmap ==null) Toast.makeText(this, "Null is image", Toast.LENGTH_SHORT).show();
+                        else {
+                            //Toast.makeText(this, "Image is good", Toast.LENGTH_SHORT).show();
+                            //Image data proper, pass it to appraise activity
+                            ImageView imageView = (ImageView)findViewById(R.id.imageView);
+                            imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 300, false));
+
+                            //Intent appraiseActivity = new Intent(this, AppraisalActivity.class);
+                            //Bundle bun = new Bundle();
+                            //bun.putString("PhotoUrl");
+                            //appraiseActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
+                            //startActivity(appraiseActivity);
+                        }
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(this, "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
         }
     }
+
+/*    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+        switch (requestCode) {
+            case REQUEST_PERMISSION_SETTING :
+                if (ActivityCompat.checkSelfPermission(AppraisalActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    //Got Permission
+                    //Toast.makeText(getBaseContext(), "Permission granted", Toast.LENGTH_LONG).show();
+                }
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        // All required changes were successfully made
+                        getDeviceLocation();//FINALLY YOUR OWN METHOD TO GET YOUR USER LOCATION HERE
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        // The user was asked to change settings, but chose not to
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }*/
 
     @Override
     protected void onPostResume() {
@@ -636,7 +706,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap=googleMap;
-        setCurrentLocationOnMap();
     }
 
     private Marker mCurrLocationMarker;

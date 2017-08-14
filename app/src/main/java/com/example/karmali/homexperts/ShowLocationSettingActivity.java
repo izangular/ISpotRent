@@ -42,11 +42,12 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_location_setting);
 
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
 
         checkLocationStatus();
+
+        setContentView(R.layout.activity_show_location_setting);
 
         final Button buttonEnableLocation = (Button) findViewById(R.id.buttonEnableLocation);
         buttonEnableLocation.setOnClickListener(new View.OnClickListener() {
@@ -163,13 +164,13 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
             }
         }
         catch (Exception ex) {
-            Toast.makeText(this, "get location after permission check"+ex.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "get location after permission check - "+ex.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void getDeviceLocation() {
         try {
-            Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
 
             //check if location is still off
             if(!LOCATION_ENABLED) {

@@ -1,16 +1,11 @@
 package com.example.karmali.homexperts;
 
-import android.*;
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
@@ -24,9 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -289,9 +281,12 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private void displayAddress(Address address){
+    private void setCurrentAddress(Address address){
         try {
-            txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
+            //txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
+            final AddressGlobal addressGlobal = (AddressGlobal)getApplicationContext();
+            addressGlobal.setAddress(address.getAddressLine(0) + ", " + address.getAddressLine(1));
+            addressGlobal.setAddressLatLng(new LatLng(address.getLatitude(),address.getLongitude()));
         }
         catch(Exception ex){
             Toast.makeText(UserLocationActivity.this, "Exception displaying address: " + ex.toString(), Toast.LENGTH_LONG).show();
@@ -363,7 +358,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                             @Override
                             public void run() {
                                 //txtCurrentAddress.setText("Merces" + ", " + address.getPostalCode() + ", " + address.getLocality());
-                                displayAddress(address);
+                                setCurrentAddress(address);
                             }
                         }
                 );

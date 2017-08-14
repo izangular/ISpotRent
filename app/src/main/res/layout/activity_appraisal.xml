@@ -389,6 +389,14 @@
                             android:spinnerMode="dropdown" />
 
                     </RelativeLayout>
+
+                    <!--    <Spinner
+                    android:id="@+id/yearspin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:popupElevation="@dimen/app_bar_height"
+                    android:popupBackground="#0000"
+                    style="@android:style/Widget.Holo.Light.Spinner"-->
                 </LinearLayout>
 
                 <View

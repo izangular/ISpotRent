@@ -178,7 +178,8 @@ public class FormActivity extends AppCompatActivity {
                         if(response.isSuccessful())
                         {
                             Intent intent = new Intent(FormActivity.this,ShowLocationSettingActivity.class);
-                            FormActivity.this.startActivity(intent);
+                            startActivity(intent);
+                            finish();
                         }
                         else
                         {

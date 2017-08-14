@@ -152,7 +152,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         for (int i = 1900; i <= thisYear; i++) {
             years.add(Integer.toString(i));
         }
-       adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, years);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, years);
 
         Spinner spinYear = (Spinner)findViewById(R.id.yearspin);
         spinYear.setAdapter(adapter);
@@ -200,12 +200,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         });
 
         //Bundle bun = getIntent().getExtras();
-       // String savedImageUrl = bun.getString("PhotoUrl");
+        // String savedImageUrl = bun.getString("PhotoUrl");
         img.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 goToLocation();
             }
-            });
+        });
 
         liftCheckBox =(CheckBox) findViewById(R.id.lift);
         lift.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -404,7 +404,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         requestTown=json.getString("town");
                         requestStreet = json.getString("street");
 
-                                 runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
+
                             @Override
                             public void run() {
 
@@ -422,13 +423,13 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                 textViewRoomsVal.setText(roomNo);
                                 seekBarRooms.setProgress(2);
 
-                               if (!year.equals(null)) {
+                                if (!year.equals(null)) {
                                     int spinnerPosition = adapter.getPosition(year);
                                     yearspin.setSelection(spinnerPosition);
                                 }
 
                                 if(liftValue.trim().equals("1"))
-                                     lift.setChecked(true);
+                                    lift.setChecked(true);
                                 else
                                     lift.setChecked(false);
 
@@ -446,7 +447,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
 
                                 txtAppraisePrice.setText(appvalue);
-                              //  findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                                //  findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 
                             }
@@ -538,7 +539,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         okHttpClient = new OkHttpClient();
         request = new Request.Builder().url(UrlAppraise).build();
         request = new Request.Builder().url(UrlAppraise)
-                 .header("Accept","application/json")
+                .header("Accept","application/json")
                 .header("Content-Type","application/x-www-form-urlencoded")
                 .post(appraiseData)
                 .build();

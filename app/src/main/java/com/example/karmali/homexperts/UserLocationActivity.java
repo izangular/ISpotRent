@@ -286,7 +286,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
             //txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
             final AddressGlobal addressGlobal = (AddressGlobal)getApplicationContext();
             addressGlobal.setAddress(address.getAddressLine(0) + ", " + address.getAddressLine(1));
-            addressGlobal.setAddressLatLng(new LatLng(address.getLatitude(),address.getLongitude()));
+            addressGlobal.setAddressLatLng(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
         }
         catch(Exception ex){
             Toast.makeText(UserLocationActivity.this, "Exception displaying address: " + ex.toString(), Toast.LENGTH_LONG).show();

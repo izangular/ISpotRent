@@ -63,7 +63,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
@@ -90,7 +97,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AppraisalActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AppraisalActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
 
     private String UrlDefaultAppraise = "https://intservices.iazi.ch/api/apps/v1/defaultOfferedRentAppraisal";
@@ -123,6 +130,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private static final int REQUEST_PERMISSION_SETTING = 101;
     private boolean sentToSettings = false;
     private SharedPreferences permissionStatus;
+    private GoogleMap mGoogleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +143,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         dialog.setCanceledOnTouchOutside(false);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        dialog.setMessage("");
+        dialog.setMessage("Calculating rent with default parameters");
         dialog.show();
 
         Bundle bun = getIntent().getExtras();
@@ -171,7 +179,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
 
         /* Bitmap bitmap = (Bitmap) this.getIntent().getParcelableExtra("BitmapImage");
-
         ImageView imageview = (ImageView) findViewById(R.id.capturedImageView);
         imageview.setImageBitmap(bitmap);*/
 
@@ -179,7 +186,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
 
-      buttonA2 = (Button) findViewById(R.id.buttonA2);
+        buttonA2 = (Button) findViewById(R.id.buttonA2);
         buttonA3 = (Button) findViewById(R.id.buttonA3);
         buttonA2.setTransformationMethod(null);
         buttonA3.setTransformationMethod(null);
@@ -270,8 +277,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         getAddress();
         txtAddress.setText(userAddress);
 
-
-
+        MapFragment mapFragment=(MapFragment)getFragmentManager().findFragmentById(R.id.mapViewCurrentLocation);
+        mapFragment.getMapAsync(this);
     }
 
     private void getAddress(){
@@ -280,14 +287,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         userAddressLatLng=addressGlobal.getAddresslatLng();
     }
 
-    public void goToLocation()
-    {
+    public void goToLocation() {
         Intent intent = new Intent(AppraisalActivity.this,UserLocationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         this.startActivity(intent);
         finish();
     }
-
 
     @Override
     public void onBackPressed(){
@@ -311,7 +316,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     static final int REQUEST_IMAGE_CAPTURE = 121;
     private void capturePictureIntent() {
@@ -365,10 +369,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-
-
-    public void defaultAppraisal(String savedImageUrl)
-    {
+    public void defaultAppraisal(String savedImageUrl) {
         okHttpClient = new OkHttpClient();
 
         if(!isNetworkAvailable())
@@ -403,10 +404,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 .header("Content-Type","application/x-www-form-urlencoded")
                 .post(formBody)
                 .build();
-
         try {
-
-            Toast.makeText(AppraisalActivity.this, "Before", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(AppraisalActivity.this, "Before", Toast.LENGTH_SHORT).show();
             okHttpClient.newCall(request).enqueue(new Callback() {
 
                 @Override
@@ -427,11 +426,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 /*                        if(category.trim().equals("0"))
                         {
                             AlertDialog.Builder builder = new AlertDialog.Builder(AppraisalActivity.this);
-
                             builder.setMessage("click another image.");
-
                             builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -443,65 +439,62 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         }
                         else
                         {*/
-                            final String appvalue = json.getString("appraisalValue");
-                            final String surface = json.getString("surfaceContract");
-                            final String liftValue = json.getString("lift");
-                            final String year = json.getString("buildYear");
-                            final String roomNo = json.getString("roomNb");
-                            final String object = json.getString("objectType");
-                            requestZip = json.getString("zip");
-                            requestTown=json.getString("town");
-                            requestStreet = json.getString("street");
+                        final String appvalue = json.getString("appraisalValue");
+                        final String surface = json.getString("surfaceContract");
+                        final String liftValue = json.getString("lift");
+                        final String year = json.getString("buildYear");
+                        final String roomNo = json.getString("roomNb");
+                        final String object = json.getString("objectType");
+                        requestZip = json.getString("zip");
+                        requestTown=json.getString("town");
+                        requestStreet = json.getString("street");
 
-                            runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
 
-                                @Override
-                                public void run() {
+                            @Override
+                            public void run() {
 
-                                    //Spinner For Object Type
-                                    adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.android_dropdown_objectType));
-                                    objectTypeSpinner.setAdapter(adapterObjectType);
-                                    if (!object.equals(null)) {
-                                        int spinnerPosition = adapter.getPosition(object);
-                                        objectTypeSpinner.setSelection(spinnerPosition);
-                                    }
-
-                                    livserfacevalue.setText(surface);
-                                    seekBarLivSurf.setProgress(Integer.parseInt(surface));
-                                    textViewRoomsVal.setText(roomNo);
-                                    int roomInt = (int)Float.parseFloat(roomNo);
-                                    seekBarRooms.setProgress(roomInt);
-
-                                    if (!year.equals(null)) {
-                                        int spinnerPosition = adapter.getPosition(year);
-                                        yearspin.setSelection(spinnerPosition);
-                                    }
-
-                                    if(liftValue.trim().equals("1"))
-                                        lift.setChecked(true);
-                                    else
-                                        lift.setChecked(false);
-
-                                    if(category.trim().equals("5"))
-                                    {
-                                        buttonA2.performClick();
-                                    }
-
-                                    else
-                                    {
-                                        buttonA3.performClick();
-                                    }
-
-
-                                    txtAppraisePrice.setText(appvalue);
-                                    dialog.dismiss();
-
-
+                                //Spinner For Object Type
+                                adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.android_dropdown_objectType));
+                                objectTypeSpinner.setAdapter(adapterObjectType);
+                                if (!object.equals(null)) {
+                                    int spinnerPosition = adapter.getPosition(object);
+                                    objectTypeSpinner.setSelection(spinnerPosition);
                                 }
-                            });
-                     //   }
+
+                                livserfacevalue.setText(surface);
+                                seekBarLivSurf.setProgress(Integer.parseInt(surface));
+                                textViewRoomsVal.setText(roomNo);
+                                int roomInt = (int)Float.parseFloat(roomNo);
+                                seekBarRooms.setProgress(roomInt);
+
+                                if (!year.equals(null)) {
+                                    int spinnerPosition = adapter.getPosition(year);
+                                    yearspin.setSelection(spinnerPosition);
+                                }
+
+                                if(liftValue.trim().equals("1"))
+                                    lift.setChecked(true);
+                                else
+                                    lift.setChecked(false);
+
+                                if(category.trim().equals("5"))
+                                {
+                                    buttonA2.performClick();
+                                }
+
+                                else
+                                {
+                                    buttonA3.performClick();
+                                }
 
 
+                                txtAppraisePrice.setText(appvalue);
+                                dialog.dismiss();
+
+
+                            }
+                        });
                     }
                     catch(Exception e)
                     {
@@ -517,7 +510,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             e.printStackTrace();
         }
     }
-
 
     private void AppraisalService() {
         if(!isNetworkAvailable())
@@ -646,8 +638,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             e.printStackTrace();}
     }
 
-
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -655,12 +645,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-
     private void getLocation() {
         /*
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
         if (!enabled) {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
@@ -744,7 +732,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     private void checkLocationPermission() {
-
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -817,7 +804,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-
     private void getDeviceLocation() {
         try {
             Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
@@ -837,7 +823,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -916,15 +901,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         break;
                     case Activity.RESULT_CANCELED:
                         // The user was asked to change settings, but chose not to
-
                         break;
                     default:
                         break;
                 }
                 break;
-
         }
-
     }*/
 
     @Override
@@ -950,4 +932,23 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap=googleMap;
+        setCurrentLocationOnMap();
+    }
+
+    private Marker mCurrLocationMarker;
+    private void setCurrentLocationOnMap() {
+        if (mGoogleMap!=null&&userAddressLatLng != null) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(userAddressLatLng, 14);
+            if (mCurrLocationMarker != null)
+                mCurrLocationMarker.remove();
+            MarkerOptions markerOptions=new MarkerOptions().position(userAddressLatLng).title("You're here");
+            mCurrLocationMarker=mGoogleMap.addMarker(markerOptions);
+            mGoogleMap.moveCamera(cameraUpdate);
+        }
+    }
 }

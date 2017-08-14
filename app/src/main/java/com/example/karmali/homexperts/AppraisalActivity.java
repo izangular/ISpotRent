@@ -123,7 +123,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     String userAddress;
     LatLng userAddressLatLng;
 
-    private static final int REQUEST_CHECK_SETTINGS = 111;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient mGoogleApiCLient;
     private static final int LOCATION_PERMISSION_CONSTANT = 100;
@@ -148,7 +147,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         Bundle bun = getIntent().getExtras();
         String savedImageUrl = bun.getString("PhotoUrl");
-        fillImageView(savedImageUrl);
+        //fillImageView(savedImageUrl);
 
         yearspin = (Spinner) findViewById(R.id.yearspin);
         objectTypeSpinner = (Spinner) findViewById(R.id.objectTypeSpinner);
@@ -298,75 +297,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     public void onBackPressed(){
         super.onBackPressed();
         finish();
-    }
-
-    //To display image
-    private void fillImageView(String savedImageUrl) {
-        try {
-            Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
-            //Toast.makeText(this, "Data: " + tempUri.toString(), Toast.LENGTH_SHORT).show();
-            imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
-            ImageView imageView = (ImageView)findViewById(R.id.capturedImageView);
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 450, 330, false));
-            //imageView.setImageBitmap(imageBitmap);
-            //GetLocation();
-        }
-        catch (Exception ex)
-        {
-            Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    static final int REQUEST_IMAGE_CAPTURE = 121;
-    private void capturePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Toast.makeText(this, "Error occurred", Toast.LENGTH_SHORT).show();
-            }
-            // Continue only if the File was successfully created
-            Uri photoURI=null;
-            if (photoFile != null) {
-                //Uri photoURI1= Uri.fromFile(photoFile);
-                try {
-                    photoURI = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", photoFile);
-                }
-                catch(Exception e) {
-                    Toast.makeText(this, "Error in file provider: " + e.toString(), Toast.LENGTH_LONG).show();
-                }
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
-
-    String mCurrentPhotoPath;
-    private File createImageFile() throws IOException {
-        try {
-            // Create an image file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String imageFileName = "JPEG_" + timeStamp + "_";
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-
-            // Save a file: path for use with ACTION_VIEW intents
-            mCurrentPhotoPath = image.getAbsolutePath();
-            return image;
-        }
-        catch(Exception e) {
-            Toast.makeText(this, "Error occurred"+e.toString(), Toast.LENGTH_SHORT).show();
-            return null;
-        }
     }
 
     public void defaultAppraisal(String savedImageUrl) {
@@ -645,165 +575,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void getLocation() {
-        /*
-        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!enabled) {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }
-        */
-
-
-        //check whether app is given permission to access location
-        checkLocationPermission();
-        try {
-            if (permissionStatus.getBoolean(Manifest.permission.ACCESS_FINE_LOCATION, true)) {
-                //check if device location is turned on
-
-
-                mGoogleApiCLient=new GoogleApiClient.Builder(getBaseContext()).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
-                mGoogleApiCLient.connect();
-
-                LocationRequest locationRequest=LocationRequest.create();
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                        .addLocationRequest(locationRequest);
-
-
-                PendingResult<LocationSettingsResult> result =
-                        LocationServices.SettingsApi.checkLocationSettings(mGoogleApiCLient, builder.build());
-
-                result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                    @Override
-                    public void onResult(LocationSettingsResult result) {
-                        final Status status = result.getStatus();
-                        final LocationSettingsStates lss = result.getLocationSettingsStates();
-                        switch (status.getStatusCode()) {
-                            case LocationSettingsStatusCodes.SUCCESS:
-                                // All location settings are satisfied. The client can initialize location
-                                // requests here.
-                                break;
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Location settings are not satisfied. But could be fixed by showing the user
-                                // a dialog.
-                                try {
-                                    // Show the dialog by calling startResolutionForResult(),
-                                    // and check the result in onActivityResult().
-                                    status.startResolutionForResult(
-                                            AppraisalActivity.this,
-                                            REQUEST_CHECK_SETTINGS);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Ignore the error.
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                // Location settings are not satisfied. However, we have no way to fix the
-                                // settings so we won't show the dialog.
-                                break;
-                        }
-                    }
-                });
-
-
-
-                //make it wait till permissions are set else its gonna crash
-                /*
-                mFusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    Toast.makeText(AppraisalActivity.this, "Location- Lat: " + location.getLatitude() + " Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
-                        */
-
-            }
-        }
-        catch (Exception ex) {
-            Toast.makeText(this, "get location after permission check"+ex.toString(), Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-    private void checkLocationPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(AppraisalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    //Show Information about why you need the permission
-                    //Toast.makeText(this, "if block", Toast.LENGTH_LONG).show();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AppraisalActivity.this);
-                    builder.setTitle("Need Location Permission");
-                    builder.setMessage("This app needs to access your location.");
-                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            ActivityCompat.requestPermissions(AppraisalActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CONSTANT);
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.show();
-                } else if (permissionStatus.getBoolean(Manifest.permission.ACCESS_FINE_LOCATION,false)) {
-                    //Previously Permission Request was cancelled with 'Dont Ask Again',
-                    // Redirect to Settings after showing Information about why you need the permission
-
-                    Toast.makeText(this, "Check permission: Else if block", Toast.LENGTH_LONG).show();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AppraisalActivity.this);
-                    builder.setTitle("Need Location Permission");
-                    builder.setMessage("This app needs to access your location.");
-                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            sentToSettings = true;
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", getPackageName(), null);
-                            intent.setData(uri);
-                            startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                            Toast.makeText(getBaseContext(), "Go to Permissions to Grant Location access", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.show();
-                } else {
-                    //just request the permission
-                    Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
-                    ActivityCompat.requestPermissions(AppraisalActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CONSTANT);
-                }
-
-                SharedPreferences.Editor editor = permissionStatus.edit();
-                editor.putBoolean(Manifest.permission.ACCESS_FINE_LOCATION,true);
-                editor.commit();
-            }
-        }
-        catch  (Exception ex) {
-            Toast.makeText(this, "Exception: "+ex.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-
     private void getDeviceLocation() {
         try {
             Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
@@ -835,79 +606,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                     //Toast.makeText(getBaseContext(), "Permission granted", Toast.LENGTH_LONG).show();
                 }
                 break;
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        // All required changes were successfully made
-                        getDeviceLocation();//FINALLY YOUR OWN METHOD TO GET YOUR USER LOCATION HERE
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // The user was asked to change settings, but chose not to
-
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case REQUEST_IMAGE_CAPTURE:
-                if(resultCode == RESULT_OK)
-                {
-                    try {
-
-                        //Toast.makeText(this, "Image capture activityResult", Toast.LENGTH_LONG).show();
-                        Uri tempUri=FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(mCurrentPhotoPath));
-                        //Toast.makeText(this, "Image Uri: "+tempUri.toString(), Toast.LENGTH_SHORT).show();
-                        Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
-
-                        //ivProfilePic.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
-                        //Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        if(imageBitmap ==null) Toast.makeText(this, "Null is image", Toast.LENGTH_SHORT).show();
-                        else {
-                            //Toast.makeText(this, "Image is good", Toast.LENGTH_SHORT).show();
-                            //Image data proper, pass it to appraise activity
-                            ImageView imageView = (ImageView)findViewById(R.id.imageView);
-                            imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 300, false));
-
-                            //Intent appraiseActivity = new Intent(this, AppraisalActivity.class);
-                            //Bundle bun = new Bundle();
-                            //bun.putString("PhotoUrl");
-                            //appraiseActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
-                            //startActivity(appraiseActivity);
-                        }
-                    }
-                    catch (Exception e) {
-                        Toast.makeText(this, "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
         }
     }
-
-/*    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-        switch (requestCode) {
-            case REQUEST_PERMISSION_SETTING :
-                if (ActivityCompat.checkSelfPermission(AppraisalActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    //Got Permission
-                    //Toast.makeText(getBaseContext(), "Permission granted", Toast.LENGTH_LONG).show();
-                }
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        // All required changes were successfully made
-                        getDeviceLocation();//FINALLY YOUR OWN METHOD TO GET YOUR USER LOCATION HERE
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // The user was asked to change settings, but chose not to
-                        break;
-                    default:
-                        break;
-                }
-                break;
-        }
-    }*/
 
     @Override
     protected void onPostResume() {

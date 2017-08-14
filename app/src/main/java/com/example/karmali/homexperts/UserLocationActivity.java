@@ -20,6 +20,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private AddressResultReceiver mResultReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
     TextView txtCurrentAddress;
+    Button captureButton;
 
     //private LatLng mLocationLatLong;
     private GoogleMap mGoogleMap;
@@ -91,6 +93,24 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                         }
 
                     }
+                }
+            }
+        });
+
+        captureButton = findViewById(R.id.captureButton);
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkCameraPermission()) {
+                    Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                    startActivity(showImageActivity);
+                }else {
+                    getCameraPermission();
+                    if(checkCameraPermission()){
+                        Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                        startActivity(showImageActivity);
+                    }
+
                 }
             }
         });

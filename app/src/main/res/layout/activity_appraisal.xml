@@ -91,7 +91,6 @@
                     android:textSize="16dp"
                     android:layout_margin="1dp"
                     android:paddingBottom="5dp"
-                    android:alpha="0.7"
                     android:paddingLeft="5dp"
                     android:paddingTop="2dp"
                     android:text="Address:"
@@ -141,7 +140,8 @@
                 android:id="@+id/formSection"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="1">
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
@@ -149,7 +149,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:background="#fcfcfc">
+                    android:background="#F5F5F5">
 
                     <TextView
                         android:id="@+id/housetype"
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="House Type"
-                        android:textColor="#000" />
+                        android:textColor="@color/input_text_gray" />
                 </LinearLayout>
 
 
@@ -168,9 +168,9 @@
                     android:layout_marginTop="20dp"
                     android:textAllCaps="false"
                     android:paddingTop="5dp"
-                    android:paddingRight="10dp"
+                    android:paddingRight="20dp"
                     android:paddingBottom="5dp"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="20dp"
                     android:orientation="horizontal">
 
                     <Button
@@ -178,7 +178,7 @@
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
-                        android:background="@drawable/spinnerstyle"
+                        android:background="@color/colorAccent"
                         android:text="Single Family House"
                         android:textSize="12sp"
                         android:textColor="@color/white" />
@@ -188,7 +188,7 @@
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
-                        android:background="@drawable/roundedborder"
+                        android:background="@drawable/borderbottom"
                         android:text="Condominium"
                         android:textSize="12sp"
                         android:textColor="@color/colorAccent" />
@@ -205,7 +205,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:background="#fcfcfc">
+                    android:background="#F5F5F5">
 
                     <TextView
                         android:id="@+id/textView3"
@@ -213,7 +213,7 @@
                         android:layout_height="match_parent"
                         android:text="Type of your property"
                         android:layout_weight="1"
-                        android:textColor="#000" />
+                        android:textColor="@color/input_text_gray" />
 
                 </LinearLayout>
 
@@ -221,7 +221,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="10dp"
                     android:paddingBottom="5dp"
                     android:paddingLeft="15dp"
                     android:layout_marginTop="10dp"
@@ -238,9 +237,7 @@
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/spinnerstyle">
+                        android:layout_weight="1">
 
 
                         <Spinner
@@ -273,7 +270,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#fcfcfc"
+                    android:background="#F5F5F5"
                     android:orientation="horizontal"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
@@ -286,7 +283,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Net living area (m2)"
-                        android:textColor="#000" />
+                        android:textColor="@color/input_text_gray" />
 
                     <TextView
                         android:id="@+id/textViewLivSurfVal"
@@ -352,7 +349,7 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:background="#fcfcfc">
+                    android:background="#F5F5F5">
 
                     <TextView
                         android:id="@+id/textViewRooms"
@@ -360,7 +357,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Rooms"
-                        android:textColor="#000"/>
+                        android:textColor="@color/input_text_gray"/>
 
                     <TextView
                         android:id="@+id/textViewRoomsVal"
@@ -426,14 +423,14 @@
                     android:paddingRight="5dp"
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:background="#fcfcfc">
+                    android:background="#F5F5F5">
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Year of construction or last major renovation"
-                        android:textColor="#000" />
+                        android:textColor="@color/input_text_gray" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -442,7 +439,6 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:paddingTop="5dp"
-                    android:paddingRight="10dp"
                     android:paddingBottom="5dp"
                     android:paddingLeft="15dp">
 
@@ -458,8 +454,7 @@
                         android:id="@+id/speaker_relative_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/spinnerstyle">
+                        android:layout_weight="1">
 
                         <Spinner
                             android:id="@+id/yearspin"
@@ -487,23 +482,40 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Lift"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="10dp"
                     android:textColor="#000"
                     app:buttonTint="@color/colorPrimary" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/lighter_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:background="#fcfcfc"
-                    android:orientation="vertical"
-                    android:layout_marginTop="5dp">
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:background="#F5F5F5">
+
                     <TextView
                         android:id="@+id/mapHeaderText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Map of location"
-                        android:textColor="#000" />
+                        android:textColor="@color/input_text_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:background="#F5F5F5"
+                    android:paddingLeft="15dp">
+
                     <fragment
                         android:id="@+id/mapViewCurrentLocation"
                         android:name="com.google.android.gms.maps.MapFragment"
@@ -517,11 +529,13 @@
         </LinearLayout>
 
     </ScrollView>
+
     <Button
         android:id="@+id/buttonAppraise"
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_marginTop="10dp"
+        android:textColor="@color/white"
         android:background="@drawable/button"
         android:text="Estimate" />
 </LinearLayout>

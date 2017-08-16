@@ -214,7 +214,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     //Toast.makeText(this, "if block", Toast.LENGTH_LONG).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowLocationSettingActivity.this);
                     builder.setTitle("Need Location Permission");
-                    builder.setMessage("HomeXperts needs to access your location.");
+                    builder.setMessage("XpertRent needs to access your location.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -237,7 +237,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     Toast.makeText(this, "Check permission: Else if block", Toast.LENGTH_LONG).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowLocationSettingActivity.this);
                     builder.setTitle("Need Location permission");
-                    builder.setMessage("HomeXperts needs to access your location.");
+                    builder.setMessage("XpertRent needs to access your location.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -247,7 +247,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
                             intent.setData(uri);
                             startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                            Toast.makeText(getBaseContext(), "Go to Permissions to Grant Location access", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getBaseContext(), "Go to Permissions to Grant Location access", Toast.LENGTH_LONG).show();
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -259,7 +259,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     builder.show();
                 } else {
                     //just request the permission
-                    Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(ShowLocationSettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_SETTING);
                 }
 

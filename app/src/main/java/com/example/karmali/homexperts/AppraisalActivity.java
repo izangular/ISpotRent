@@ -216,7 +216,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         estimate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Toast.makeText(getBaseContext(), "Calculating...", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getBaseContext(), "Calculating...", Toast.LENGTH_LONG).show();
                 AppraisalService();
             }
 

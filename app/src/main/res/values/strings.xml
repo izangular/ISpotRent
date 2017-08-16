@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HomeXperts</string>
+    <string name="app_name">XpertRent</string>
     <string name="google_map_api_key">AIzaSyBUJXJGghtR5vTFeIFAljrdKtEdd4aqWeM</string>
     <string-array name="android_dropdown_objectType">
             <item >Normal Flat</item>

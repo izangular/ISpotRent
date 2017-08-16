@@ -155,6 +155,14 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 }
             };
         };
+
+        ImageView ivSetting = findViewById(R.id.imageViewSettings);
+        ivSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserLocationActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
 
@@ -453,6 +461,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            OPEN_CAMERA=true;
                             dialog.cancel();
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -472,6 +481,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                     //just request the permission
                     //Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(UserLocationActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_SETTING);
+                    OPEN_CAMERA=true;
                 }
 
                 SharedPreferences.Editor editor = permissionStatus.edit();

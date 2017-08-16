@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -42,6 +43,7 @@ public class ShowImageActivity extends AppCompatActivity {
         //fillImageView(imageUrl);
 
 
+
         Button buttonConfirmImage = findViewById(R.id.buttonConfirmImage);
         buttonConfirmImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,8 @@ public class ShowImageActivity extends AppCompatActivity {
             }
         });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /*
         ImageView imageViewGoBackToLocation = findViewById(R.id.gotoloacationactivity);
         imageViewGoBackToLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +68,7 @@ public class ShowImageActivity extends AppCompatActivity {
                 finish();
             }
         });
+        */
 
     }
 
@@ -80,5 +85,14 @@ public class ShowImageActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

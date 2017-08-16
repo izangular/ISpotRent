@@ -216,6 +216,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            CALL_ENABLE_LOCATION=true;
                             dialog.cancel();
                             sentToSettings = true;
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -236,6 +237,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     //just request the permission
                     //Toast.makeText(this, "Check permission: Else block", Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(ShowLocationSettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_SETTING);
+                    CALL_ENABLE_LOCATION=true;
                 }
 
                 SharedPreferences.Editor editor = permissionStatus.edit();

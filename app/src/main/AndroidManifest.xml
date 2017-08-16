@@ -24,7 +24,7 @@
     <application
         android:name=".AddressGlobal"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_xpert_rent"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -45,7 +45,7 @@
 
         <activity
             android:name=".HomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,20 +54,19 @@
         </activity>
         <activity
             android:name=".FormActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".UserLocationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AppraisalActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ShowLocationSettingActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".CameraActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".ShowImageActivity"
             android:screenOrientation="portrait" />
@@ -76,6 +75,9 @@
             android:name=".GeocoderIntentService"
             android:exported="false" />
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"/>
     </application>
 
 </manifest>

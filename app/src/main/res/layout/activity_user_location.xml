@@ -16,7 +16,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageViewSettings"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="end|bottom"

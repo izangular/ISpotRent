@@ -37,6 +37,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
     private static final int REQUEST_CHECK_SETTINGS = 111;
     private static final int REQUEST_PERMISSION_SETTING = 101;
     private static boolean LOCATION_ENABLED=false;
+    private static boolean CALL_ENABLE_LOCATION=false;
     private boolean sentToSettings = false;
 
     @Override
@@ -145,19 +146,6 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     }
                 });
 
-                //make it wait till permissions are set else its gonna crash
-                /*
-                mFusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    Toast.makeText(AppraisalActivity.this, "Location- Lat: " + location.getLatitude() + " Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
-                */
             }
             else {
                 setPermissions();
@@ -170,8 +158,6 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
 
     private void getDeviceLocation() {
         try {
-            //Toast.makeText(getBaseContext(), "All set up. Now getting location", Toast.LENGTH_LONG).show();
-
             //check if location is still off
             if(!LOCATION_ENABLED) {
                 enableLocation();
@@ -181,20 +167,8 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                 startActivity(userLocationActivity);
                 finish();
             }
-            /*
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Toast.makeText(AppraisalActivity.this, "Hello Satvesh! Location- Lat: " + location.getLatitude() + " Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                    */
         } catch (SecurityException ex) {
-
+            //no exception because permission already taken
         }
     }
 
@@ -218,6 +192,7 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            CALL_ENABLE_LOCATION=true;
                             dialog.cancel();
                             ActivityCompat.requestPermissions(ShowLocationSettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_SETTING);
                         }
@@ -279,8 +254,13 @@ public class ShowLocationSettingActivity extends AppCompatActivity implements Go
         if (sentToSettings) {
             if (ActivityCompat.checkSelfPermission(ShowLocationSettingActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //Got Permission, go to next activity
-                //Toast.makeText(getBaseContext(), "Returned from settings. Permission granted", Toast.LENGTH_LONG).show();
+                enableLocation();
             }
+        }
+        if(CALL_ENABLE_LOCATION) {
+            CALL_ENABLE_LOCATION=false;
+            if(checkPermission())
+                enableLocation();
         }
     }
 

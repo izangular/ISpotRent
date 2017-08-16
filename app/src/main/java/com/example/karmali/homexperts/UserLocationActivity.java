@@ -48,7 +48,7 @@ import java.util.Date;
 public class UserLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int REQUEST_PERMISSION_SETTING = 101;
-    private boolean sentToSettings = false;
+    private static boolean OPEN_CAMERA = false;
     private SharedPreferences permissionStatus;
 
     private AddressResultReceiver mResultReceiver;
@@ -273,25 +273,25 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                         //Toast.makeText(this, "Image Uri: "+tempUri.toString(), Toast.LENGTH_SHORT).show();
                         Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
 
-                        //ivProfilePic.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
-                        //Bitmap imageBitmap = (Bitmap) extras.get("data");
                         if(imageBitmap ==null) Toast.makeText(this, "Null is image", Toast.LENGTH_SHORT).show();
                         else {
-                            //Toast.makeText(this, "Image is good", Toast.LENGTH_SHORT).show();
-                            //Image data proper, pass it to appraise activity
-                            //ImageView imageView = (ImageView)findViewById(R.id.imageView);
-                            //imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 300, false));
-
-                            /*
-                            Intent appraiseActivity = new Intent(this, AppraisalActivity.class);
-                            appraiseActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
-                            startActivity(appraiseActivity);
-                            */
                             //show image activity
                             Intent showImageActivity = new Intent(this, AppraisalActivity.class);
                             showImageActivity.putExtra("PhotoUrl", mCurrentPhotoPath);
                             startActivity(showImageActivity);
                         }
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(this, "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case REQUEST_PERMISSION_SETTING:
+                if(resultCode == RESULT_OK)
+                {
+                    try {
+                        Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                        startActivity(showImageActivity);
                     }
                     catch (Exception e) {
                         Toast.makeText(this, "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
@@ -315,7 +315,6 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
     @Override
@@ -344,6 +343,13 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onResume() {
         super.onResume();
+        if(OPEN_CAMERA){
+            OPEN_CAMERA=false;
+            if(checkCameraPermission()) {
+                Intent showImageActivity = new Intent(UserLocationActivity.this, CameraActivity.class);
+                startActivity(showImageActivity);
+            }
+        }
         startLocationUpdates();
     }
 
@@ -361,7 +367,6 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
             Toast.makeText(UserLocationActivity.this, "Security exception getting location updates: " + se.toString(), Toast.LENGTH_LONG).show();
         }
     }
-
 
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
@@ -420,10 +425,11 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 if (ActivityCompat.shouldShowRequestPermissionRationale(UserLocationActivity.this, Manifest.permission.CAMERA)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UserLocationActivity.this);
                     builder.setTitle("Need Camera Permission");
-                    builder.setMessage("HomeXperts needs to access your Camera.");
+                    builder.setMessage("XpertRent needs to access your Camera.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            OPEN_CAMERA=true;
                             dialog.cancel();
                             ActivityCompat.requestPermissions(UserLocationActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_SETTING);
                         }
@@ -443,12 +449,11 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                     //Toast.makeText(this, "Check permission: Else if block", Toast.LENGTH_LONG).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(UserLocationActivity.this);
                     builder.setTitle("Need Camera permission");
-                    builder.setMessage("HomeXperts needs to access your Camera.");
+                    builder.setMessage("XpertRent needs to access your Camera.");
                     builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            sentToSettings = true;
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             Uri uri = Uri.fromParts("package", getPackageName(), null);
                             intent.setData(uri);
@@ -470,7 +475,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 }
 
                 SharedPreferences.Editor editor = permissionStatus.edit();
-                editor.putBoolean(Manifest.permission.ACCESS_FINE_LOCATION,true);
+                editor.putBoolean(Manifest.permission.CAMERA,true);
                 editor.commit();
 
             }

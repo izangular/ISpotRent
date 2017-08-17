@@ -5,12 +5,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,7 +27,27 @@ public class ShowImageActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
+        ///////////Action Bar//////////////
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
 
+        View mCustomView = mInflater.inflate(R.layout.customactionbar, null);
+
+        ImageView backButton = (ImageView) mCustomView.findViewById(R.id.backbutton);
+        ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.action_settings);
+        imageButton.setVisibility(View.INVISIBLE);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShowImageActivity.this, CameraActivity.class));
+            }
+        });
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        ///////////Action Bar End//////////////
         Bundle bun = getIntent().getExtras();
         final String imageUrl = bun.getString("PhotoUrl");
 
@@ -56,7 +79,7 @@ public class ShowImageActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         /*
         ImageView imageViewGoBackToLocation = findViewById(R.id.gotoloacationactivity);
         imageViewGoBackToLocation.setOnClickListener(new View.OnClickListener() {
@@ -87,12 +110,12 @@ public class ShowImageActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case android.R.id.home:
                 finish();
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

@@ -35,16 +35,19 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -54,6 +57,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -117,7 +121,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     SeekBar  seekBarLivSurf, seekBarRooms,roomSeekBar,surfaceSeekBar;
     Spinner yearspin,objectTypeSpinner;
     CheckBox lift,liftCheckBox;
-    Button buttonA3, buttonA2, estimate;
+    Button buttonA3, buttonA2;
+    Button estimate;
     ArrayAdapter<String> adapter, adapterObjectType;
     private ProgressBar bar;
 
@@ -156,6 +161,40 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appraisal);
 //////////////
+        ///////////Action Bar//////////////
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.customactionbar, null);
+
+        ImageView backButton = (ImageView) mCustomView.findViewById(R.id.backbutton);
+        ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.action_settings);
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AppraisalActivity.this, UserLocationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AppraisalActivity.this, SettingsActivity.class));
+            }
+        });
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        ///////////Action Bar End//////////////
+
         bindActivity();
 
         mAppBarLayout.addOnOffsetChangedListener(this);
@@ -171,7 +210,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         dialog.setCanceledOnTouchOutside(true);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        dialog.setMessage("Calculating rent with default parameters");
+        dialog.setMessage("Calculating Rent");
         dialog.show();
 
 

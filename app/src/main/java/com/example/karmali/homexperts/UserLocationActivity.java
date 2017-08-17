@@ -17,12 +17,16 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +57,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private static boolean OPEN_CAMERA = false;
     private SharedPreferences permissionStatus;
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_settings:
@@ -61,7 +65,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private AddressResultReceiver mResultReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -76,18 +80,39 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private Marker mCurrLocationMarker;
 
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
         return true;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_location);
 
+        ///////////Action Bar//////////////
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.customactionbar, null);
+
+        ImageView backButton = (ImageView) mCustomView.findViewById(R.id.backbutton);
+        backButton.setVisibility(View.GONE);
+        ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.action_settings);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserLocationActivity.this, SettingsActivity.class));
+            }
+        });
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        ///////////Action Bar End//////////////
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mResultReceiver = new AddressResultReceiver(null);

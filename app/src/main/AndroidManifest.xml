@@ -63,7 +63,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ShowLocationSettingActivity"
-            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>

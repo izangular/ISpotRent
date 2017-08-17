@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         ImageView backButton = (ImageView) mCustomView.findViewById(R.id.backbutton);
         ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.action_settings);
-        imageButton.setVisibility(View.GONE);
+        imageButton.setVisibility(View.INVISIBLE);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

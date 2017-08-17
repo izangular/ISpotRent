@@ -41,7 +41,10 @@ public class ShowImageActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ShowImageActivity.this, CameraActivity.class));
+                Intent intent = new Intent(ShowImageActivity.this, CameraActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                finish();
             }
         });
 

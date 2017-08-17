@@ -101,7 +101,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         View mCustomView = mInflater.inflate(R.layout.customactionbar, null);
 
         ImageView backButton = (ImageView) mCustomView.findViewById(R.id.backbutton);
-        backButton.setVisibility(View.GONE);
+        backButton.setVisibility(View.INVISIBLE);
         ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.action_settings);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -19,6 +19,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,6 +53,16 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private static boolean OPEN_CAMERA = false;
     private SharedPreferences permissionStatus;
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                startActivity(new Intent(UserLocationActivity.this, SettingsActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private AddressResultReceiver mResultReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
     TextView txtCurrentAddress;
@@ -63,6 +75,13 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_actionbar, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,14 +174,6 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 }
             };
         };
-
-        ImageView ivSetting = findViewById(R.id.imageViewSettings);
-        ivSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(UserLocationActivity.this, SettingsActivity.class));
-            }
-        });
     }
 
 

@@ -263,7 +263,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         buttonA2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonA2.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
-                buttonA3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.roundedborder, null));
+                buttonA3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.borderbottom, null));
                 buttonA2.setTextColor(Color.WHITE);
                 buttonA3.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
                 requestCategory = "5";
@@ -273,7 +273,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         buttonA3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonA3.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
-                buttonA2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.roundedborder, null));
+                buttonA2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.borderbottom, null));
                 buttonA3.setTextColor(Color.WHITE);
                 buttonA2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
                 requestCategory = "6";

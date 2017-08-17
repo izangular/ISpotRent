@@ -34,6 +34,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
@@ -41,10 +42,13 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -53,6 +57,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -97,7 +102,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AppraisalActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+public class AppraisalActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, AppBarLayout.OnOffsetChangedListener {
 
 
     private String UrlDefaultAppraise = "https://intservices.iazi.ch/api/apps/v1/defaultOfferedRentAppraisal";
@@ -118,7 +123,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
     Bitmap imageBitmap;
     ProgressDialog dialog;
-    private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0";
+    private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0",requestaddres,requestqualityMicro,requestortId;
 
     String userAddress;
     LatLng userAddressLatLng;
@@ -131,17 +136,39 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private boolean sentToSettings = false;
     private SharedPreferences permissionStatus;
     private GoogleMap mGoogleMap;
+    ////////////////////////
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
+    private RelativeLayout mTitleContainer;
+    private TextView mTitle, textViewAppraiseValueThumb;
+    private  ImageView mImage;
+    private AppBarLayout mAppBarLayout;
+    private Toolbar mToolbar;
+/////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appraisal);
+//////////////
+        bindActivity();
 
+        mAppBarLayout.addOnOffsetChangedListener(this);
 
+        startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+        startAlphaAnimation(mImage, 0, View.INVISIBLE);
+        startAlphaAnimation(textViewAppraiseValueThumb,0,View.INVISIBLE);
+        ///////////
+        txtAddress = findViewById(R.id.addressText);
         dialog = new ProgressDialog(AppraisalActivity.this);
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         dialog.setMessage("Calculating rent with default parameters");
@@ -162,11 +189,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         lift = (CheckBox) findViewById(R.id.lift);
         txtAppraisePrice = (TextView) findViewById(R.id.textViewAppraiseValue);
-
+        textViewAppraiseValueThumb = (TextView) findViewById(R.id.textViewAppraiseValueThumb);
+        getAddress();
         //commented because it hangs
         defaultAppraisal(savedImageUrl);
 
-        ImageView img = (ImageView) findViewById(R.id.gotoloacationactivity);
+        //  ImageView img = (ImageView) findViewById(R.id.gotoloacationactivity);
 
         ArrayList<String> years = new ArrayList<String>();
 
@@ -224,11 +252,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         //Bundle bun = getIntent().getExtras();
         // String savedImageUrl = bun.getString("PhotoUrl");
-        img.setOnClickListener(new View.OnClickListener(){
+   /*     img.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 goToLocation();
             }
-        });
+        });*/
 
         liftCheckBox =(CheckBox) findViewById(R.id.lift);
         lift.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -277,9 +305,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             }
         });
 
-        txtAddress = findViewById(R.id.addressText);
-        getAddress();
-        txtAddress.setText(userAddress);
+
 
         MapFragment mapFragment=(MapFragment)getFragmentManager().findFragmentById(R.id.mapViewCurrentLocation);
         mapFragment.getMapAsync(this);
@@ -311,7 +337,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             //Toast.makeText(this, "Data: " + tempUri.toString(), Toast.LENGTH_SHORT).show();
             imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
             ImageView imageView = (ImageView)findViewById(R.id.capturedImageView);
+            ImageView capturedImageThumb  = (ImageView) findViewById(R.id.capturedImageThumb);
             imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 450, 330, false));
+            capturedImageThumb.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 150, 120, false));
             //imageView.setImageBitmap(imageBitmap);
             //GetLocation();
         }
@@ -345,8 +373,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
             RequestBody formBody = new FormBody.Builder()
                     .add("imageBase64", imageBase64)
-                    .add("lat", "47.4091209")
-                    .add("lng", "8.5467016")
+                    .add("lat",String.valueOf(userAddressLatLng.latitude))
+                    .add("lng",String.valueOf(userAddressLatLng.longitude))
                     .add("deviceId", deviceId.toString())
                     .build();
             request = new Request.Builder().url(UrlDefaultAppraise).build();
@@ -375,23 +403,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         final JSONObject json = new JSONObject(myResponse);
                         final String category = json.getString("categoryCode");
 
-
-                        /*if(category.trim().equals("0"))
-                        {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(AppraisalActivity.this);
-                            builder.setMessage("click another image.");
-                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            AlertDialog alert = builder.create();
-                            alert.setCanceledOnTouchOutside(false);
-                            alert.show();
-                        }
-                        else
-                        {*/
                         final String appvalue = json.getString("appraisalValue");
                         final String surface = json.getString("surfaceContract");
                         final String liftValue = json.getString("lift");
@@ -401,11 +412,17 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         requestZip = json.getString("zip");
                         requestTown = json.getString("town");
                         requestStreet = json.getString("street");
+                        requestaddres = requestStreet + ", " + requestZip + " " + requestTown;
+                        requestqualityMicro = json.getString("qualityMicro");
+                        requestortId = json.getString("ortId");
 
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
+
+
+                                txtAddress.setText(requestaddres);
 
                                 //Spinner For Object Type
                                 adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
@@ -439,6 +456,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
 
                                 txtAppraisePrice.setText(appvalue);
+                                textViewAppraiseValueThumb.setText(appvalue);
                                 dialog.dismiss();
 
 
@@ -489,19 +507,21 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             String value = values[spinnerPosition];
 
             RequestBody appraiseData = new FormBody.Builder()
-                    .add("ortId", "35")
-                    .add("externalKey", "35")
+                    .add("ortId", requestortId)
                     .add("categoryCode", requestCategory)
                     .add("objectTypeCode", value)
-                    .add("qualityMicro", "3")
+                    .add("qualityMicro", requestqualityMicro)
                     .add("surfaceContract", surfaceLiving.getText().toString())
                     .add("buildYear", buildYear)
                     .add("roomNb", roomNb.getText().toString())
                     .add("lift", requestlift)
                     .add("deviceId", deviceId.toString())
-                    .add("address", "address")
-                    .add("address.lat", "0")
-                    .add("address.lng", "0")
+                    .add("address.address",requestaddres)
+                    .add("address.lat",String.valueOf(userAddressLatLng.latitude) )
+                    .add("address.lng", String.valueOf(userAddressLatLng.longitude))
+                    .add("address.street",requestStreet)
+                    .add("address.zip",requestZip)
+                    .add("address.town",requestTown)
                     .add("address.country", "Switzerland")
                     .build();
 
@@ -541,6 +561,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                 @Override
                                 public void run() {
 
+                                    txtAddress.setText(requestStreet + ", " + requestZip + " " + requestTown );
 
                                     livserfacevalue.setText(surface);
                                     seekBarLivSurf.setProgress(Integer.parseInt(surface));
@@ -569,6 +590,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                         buttonA3.performClick();
 
                                     txtAppraisePrice.setText(appvalue);
+                                    textViewAppraiseValueThumb.setText(appvalue);
                                 }
                             });
 
@@ -634,4 +656,79 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             mGoogleMap.moveCamera(cameraUpdate);
         }
     }
+
+    private void bindActivity() {
+        mToolbar        = (Toolbar) findViewById(R.id.main_toolbar);
+        mTitle          = (TextView) findViewById(R.id.main_textview_pricetitle);
+        mTitleContainer = (RelativeLayout) findViewById(R.id.main_linearlayout_title);
+        mImage  = (ImageView) findViewById(R.id.capturedImageThumb);
+        textViewAppraiseValueThumb = (TextView) findViewById(R.id.textViewAppraiseValueThumb);
+        mAppBarLayout   = (AppBarLayout) findViewById(R.id.main_appbar);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+        handleAlphaOnTitle(percentage);
+        handleToolbarTitleVisibility(percentage);
+    }
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(mImage, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(textViewAppraiseValueThumb, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mToolbar.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.toolbarcolor, null));
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(mImage, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(textViewAppraiseValueThumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mToolbar.setBackgroundColor(0x00000000);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
+    }
+
 }

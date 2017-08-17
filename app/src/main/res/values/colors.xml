@@ -7,6 +7,6 @@
     <color name="input_text_gray">#818181</color>
     <color name="red">#ca230d</color>
     <color name="white">#fff</color>
-
+    <color name="toolbarcolor">#4a4a4a</color>
     <color name="black_overlay">#66000000</color>
 </resources>

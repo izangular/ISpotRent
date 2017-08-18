@@ -100,7 +100,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference myPref = findPreference(getString(R.string.key_contact_us));
             myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    sendFeedback(getActivity());
+                    //sendFeedback(getActivity());
                     return true;
                 }
             });

@@ -29,8 +29,7 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@color/white"
                 android:orientation="vertical"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.3"
+                app:layout_collapseMode="pin"
                 >
                 <!--Image-->
                 <RelativeLayout android:layout_height="wrap_content"
@@ -265,7 +264,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Net living area (m2)"
+                        android:paddingBottom="5dip"
+                        android:text="@string/net_liv_area"
                         android:textColor="@color/input_text_gray" />
 
                     <TextView
@@ -275,6 +275,15 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="0"
+                        android:textColor="#000"
+                        android:textSize="@dimen/text_big"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:paddingLeft="1dp"
+                        android:text="@string/meter_square"
                         android:textColor="#000"
                         android:textSize="@dimen/text_big"
                         android:textStyle="bold" />
@@ -292,12 +301,19 @@
 
                     <TextView
                         android:id="@+id/textViewLivSurfRangeLow"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                         android:paddingLeft="1dp"
+                        android:text="@string/meter_square"
+                        android:textColor="#000"
+                        android:textSize="@dimen/text_small"
+                        />
 
                     <TextView
                         android:id="@+id/textViewLivSurfRangeHigh"
@@ -305,10 +321,19 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:paddingEnd="5dp"
                         android:text="500"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:paddingLeft="1dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/meter_square"
+                        android:textColor="#000"
+                        android:textSize="@dimen/text_small"
+                        />
                 </LinearLayout>
 
                 <SeekBar
@@ -391,7 +416,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:padding="5dp"
-                    android:max="15" />
+                    android:max="15"
+                    />
 
                 <View
                     android:layout_width="match_parent"
@@ -520,40 +546,116 @@
         android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         >
         <LinearLayout android:layout_height="match_parent"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:gravity="top"
+             android:gravity="left"
             >
+
             <ImageView
                 android:id="@+id/capturedImageThumb"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/ic_launcher"
                 />
 
-            <TextView
-                android:id="@+id/main.textview.pricetitle"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Est.Value:"
-                android:textSize="16dp"
-                android:textColor="#fff"
-                />
-            <TextView
-                android:id="@+id/textViewAppraiseValueThumb"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/main.textview.pricetitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Est.Value:"
+                        android:textSize="14sp"
+                        android:textColor="#fff"
+                        />
+                    <TextView
+                        android:id="@+id/textViewAppraiseValueThumb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        />
+            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/maintextviewsurfacetitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Surface:"
+                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:textColor="#fff"
+                        />
+                    <TextView
+                        android:id="@+id/textViewsurfaceValueThumb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/colorAccent"
+                        android:layout_weight="0.5"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/meter_squarethumb"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginLeft="1dp"
+                        android:layout_height="match_parent"
+                         android:text="@string/meter_squarethumb"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                         />
+
+                    <TextView
+                        android:id="@+id/maintextviewroomstitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:text="Rooms:"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:textColor="#fff"
+                        />
+                    <TextView
+                        android:id="@+id/textViewroomsValueThumb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
+                    </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 

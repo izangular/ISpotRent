@@ -59,9 +59,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             }, 3000);
 
             // mark first time has runned.
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("firstTime", true);
-            editor.commit();
+            //SharedPreferences.Editor editor = prefs.edit();
+           // editor.putBoolean("firstTime", true);
+           // editor.commit();
         }
 
         else{

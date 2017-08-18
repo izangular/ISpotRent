@@ -45,6 +45,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -90,10 +91,13 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
@@ -150,7 +154,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private boolean mIsTheTitleContainerVisible = true;
 
     private RelativeLayout mTitleContainer;
-    private TextView mTitle, textViewAppraiseValueThumb;
+    private TextView mTitle, textViewAppraiseValueThumb,textViewsurfaceValueThumb,textViewroomsValueThumb,maintextviewsurfacetitle,maintextviewroomstitle,meter_squarethumb;
     private  ImageView mImage;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
@@ -202,6 +206,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
         startAlphaAnimation(mImage, 0, View.INVISIBLE);
         startAlphaAnimation(textViewAppraiseValueThumb,0,View.INVISIBLE);
+        startAlphaAnimation(textViewroomsValueThumb,0,View.INVISIBLE);
+        startAlphaAnimation(textViewsurfaceValueThumb,0,View.INVISIBLE);
+        startAlphaAnimation(maintextviewsurfacetitle,0,View.INVISIBLE);
+        startAlphaAnimation(maintextviewroomstitle,0,View.INVISIBLE);
+        startAlphaAnimation(meter_squarethumb,0,View.INVISIBLE);
         ///////////
         txtAddress = findViewById(R.id.addressText);
         dialog = new ProgressDialog(AppraisalActivity.this);
@@ -229,6 +238,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         lift = (CheckBox) findViewById(R.id.lift);
         txtAppraisePrice = (TextView) findViewById(R.id.textViewAppraiseValue);
         textViewAppraiseValueThumb = (TextView) findViewById(R.id.textViewAppraiseValueThumb);
+
+        textViewsurfaceValueThumb = (TextView) findViewById(R.id.textViewsurfaceValueThumb);
+
+        textViewroomsValueThumb = (TextView) findViewById(R.id.textViewroomsValueThumb);
         getAddress();
         //commented because it hangs
         defaultAppraisal(savedImageUrl);
@@ -314,8 +327,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         roomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int roomNo, boolean fromUser) {
-
+                double rooms = ((double) roomNo);
                 textViewRoomsVal.setText(String.valueOf(roomNo));
+                textViewroomsValueThumb.setText(String.valueOf(roomNo));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -333,6 +347,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
 
                 livserfacevalue.setText(String.valueOf(progress));
+                textViewsurfaceValueThumb.setText(String.valueOf(progress));
             }
 
             @Override
@@ -455,6 +470,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                         requestqualityMicro = json.getString("qualityMicro");
                         requestortId = json.getString("ortId");
 
+
+                        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                        symbols.setGroupingSeparator('\'');
+                        DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
+                            final  String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
+
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -473,8 +494,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
                                 livserfacevalue.setText(surface);
                                 seekBarLivSurf.setProgress(Integer.parseInt(surface));
+
                                 textViewRoomsVal.setText(roomNo);
-                                int roomInt = (int) Float.parseFloat(roomNo);
+                                int roomInt = (int)Math.round(Float.parseFloat(roomNo));
                                 seekBarRooms.setProgress(roomInt);
 
                                 if (!year.equals(null)) {
@@ -494,8 +516,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                 }
 
 
-                                txtAppraisePrice.setText(appvalue);
-                                textViewAppraiseValueThumb.setText(appvalue);
+                                txtAppraisePrice.setText(localeFormattedNumber);
+                                textViewAppraiseValueThumb.setText(localeFormattedNumber);
                                 dialog.dismiss();
 
 
@@ -596,6 +618,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                             requestZip = json.getString("zip");
                             requestTown = json.getString("town");
                             requestStreet = json.getString("street");
+                            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                            symbols.setGroupingSeparator('\'');
+                            DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
+                            final  String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -628,8 +654,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                     else
                                         buttonA3.performClick();
 
-                                    txtAppraisePrice.setText(appvalue);
-                                    textViewAppraiseValueThumb.setText(appvalue);
+                                    txtAppraisePrice.setText(localeFormattedNumber);
+                                    textViewAppraiseValueThumb.setText(localeFormattedNumber);
                                 }
                             });
 
@@ -703,6 +729,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         mImage  = (ImageView) findViewById(R.id.capturedImageThumb);
         textViewAppraiseValueThumb = (TextView) findViewById(R.id.textViewAppraiseValueThumb);
         mAppBarLayout   = (AppBarLayout) findViewById(R.id.main_appbar);
+        textViewroomsValueThumb = (TextView) findViewById(R.id.textViewroomsValueThumb);
+        textViewsurfaceValueThumb = (TextView) findViewById(R.id.textViewsurfaceValueThumb);
+        maintextviewroomstitle = (TextView) findViewById(R.id.maintextviewroomstitle);
+        maintextviewsurfacetitle = (TextView) findViewById(R.id.maintextviewsurfacetitle);
+        meter_squarethumb = (TextView) findViewById(R.id.meter_squarethumb);
     }
 
 
@@ -727,6 +758,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 startAlphaAnimation(mImage, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 startAlphaAnimation(textViewAppraiseValueThumb, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(textViewroomsValueThumb, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(textViewsurfaceValueThumb, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(maintextviewroomstitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(maintextviewsurfacetitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(meter_squarethumb, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mToolbar.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.toolbarcolor, null));
                 mIsTheTitleVisible = true;
             }
@@ -737,6 +773,11 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 startAlphaAnimation(mImage, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 startAlphaAnimation(textViewAppraiseValueThumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(textViewroomsValueThumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(textViewsurfaceValueThumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(maintextviewroomstitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(maintextviewsurfacetitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                startAlphaAnimation(meter_squarethumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mToolbar.setBackgroundColor(0x00000000);
                 mIsTheTitleVisible = false;
             }

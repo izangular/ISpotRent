@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -177,6 +179,12 @@ public class FormActivity extends AppCompatActivity {
                         Log.i("IN", myResponse);
                         if(response.isSuccessful())
                         {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(FormActivity.this);
+
+                                // mark first time has runned.
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("firstTime", true);
+                            editor.commit();
                             Intent intent = new Intent(FormActivity.this,ShowLocationSettingActivity.class);
                             startActivity(intent);
                             finish();

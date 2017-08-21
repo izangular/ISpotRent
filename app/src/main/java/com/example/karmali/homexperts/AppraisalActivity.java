@@ -789,7 +789,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if(mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+            //    startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
 
                 mIsTheTitleContainerVisible = false;
             }
@@ -797,7 +797,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         } else {
 
             if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+              //  startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
 
                 mIsTheTitleContainerVisible = true;
             }

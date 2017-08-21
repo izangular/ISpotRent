@@ -661,10 +661,10 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                         int spinnerPosition = adapter.getPosition(year);
                                         yearspin.setSelection(spinnerPosition);
                                     }
-                                    if (liftValue.trim().equals("1"))
+                                   /* if (liftValue.trim().equals("1"))
                                         lift.setChecked(true);
                                     else
-                                        lift.setChecked(false);
+                                        lift.setChecked(false);*/
 
                                     if (category.trim().equals("5"))
                                         buttonA2.performClick();

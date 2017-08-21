@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000</color>
-    <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#F9B122</color>
-    <color name="lighter_gray">#c7c7c7</color>
-    <color name="input_text_gray">#818181</color>
-    <color name="red">#631207</color>
-    <color name="white">#fff</color>
-    <color name="toolbarcolor">#4a4a4a</color>
-    <color name="black_overlay">#66000000</color>
+<color name="colorPrimary">#000</color>
+<color name="colorPrimaryDark">#000</color>
+<color name="colorAccent">#F0AD4E</color>
+<color name="lighter_gray">#c7c7c7</color>
+<color name="input_text_gray">#5f5f5f</color>
+<color name="red">#631207</color>
+<color name="white">#fff</color>
+<color name="labelbackgroundcolor">#f5f5f5</color>
+<color name="toolbarcolor">#4a4a4a</color>
+<color name="black_overlay">#66000000</color>
 </resources>

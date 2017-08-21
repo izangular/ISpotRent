@@ -6,15 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.karmali.homexperts.HomeActivity"
-    android:background="@drawable/verticlebackground"
+    android:background="@drawable/launch"
       >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:alpha="0.7"
-        android:background="#000"
         android:orientation="horizontal">
 
         <ImageView

@@ -59,7 +59,7 @@
                     android:layout_width="100dp"
                     android:layout_height="70dp"
                     android:background="#dcdcdc"
-                    android:src="@drawable/camera"
+                    android:src="@drawable/add_photo"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="54dp" />

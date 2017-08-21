@@ -173,8 +173,9 @@
                         android:layout_weight="0.5"
                         android:background="@color/colorAccent"
                         android:text="Single Family House"
-                        android:textSize="12sp"
-                        android:textColor="@color/white" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/buttonA3"
@@ -183,6 +184,7 @@
                         android:layout_weight="0.5"
                         android:background="@drawable/borderbottom"
                         android:text="Condominium"
+                        android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/colorAccent" />
                 </LinearLayout>
@@ -317,14 +319,14 @@
                         android:text="1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
-                    <TextView
+              <!--      <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                          android:paddingLeft="1dp"
                         android:text="@string/meter_square"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small"
-                        />
+                        />-->
 
                     <TextView
                         android:id="@+id/textViewLivSurfRangeHigh"
@@ -335,16 +337,6 @@
                         android:text="500"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:paddingLeft="1dp"
-                        android:paddingEnd="5dp"
-                        android:text="@string/meter_square"
-                        android:textColor="#000"
-                        android:textSize="@dimen/text_small"
-                        />
                 </LinearLayout>
 
                 <SeekBar
@@ -682,6 +674,7 @@
             android:layout_gravity="bottom"
             android:background="@color/colorAccent"
             android:text="Estimate"
+            android:textAllCaps="false"
             app:borderWidth="0dp"
             android:textColor="@color/white"
             app:layout_anchor="@+id/ScrollView01"

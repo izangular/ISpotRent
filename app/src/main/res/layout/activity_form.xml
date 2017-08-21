@@ -199,6 +199,21 @@
                     android:gravity="center"
                     android:text="REGISTER"
                     android:textColor="#fff" />
+
+                <RelativeLayout
+                    android:id="@+id/progressLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
+                    <ProgressBar
+                        android:id="@+id/progressBarAppraisal"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
 

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.Settings.Secure;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPOutputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,6 +45,9 @@ import static java.security.AccessController.getContext;
  */
 
 public class FormActivity extends AppCompatActivity {
+    RelativeLayout relView;
+    Button register;
+
     EditText firstName;
     EditText lastName;
     EditText email;
@@ -63,10 +68,13 @@ public class FormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        Button register = (Button) findViewById(R.id.register);
+        relView = findViewById(R.id.progressLayout);
+        register = findViewById(R.id.register);
+
         register.setOnClickListener( new View.OnClickListener(){
              @Override
              public void onClick(View view) {
+
                  firstName = (EditText) findViewById(R.id.firstName);
                  lastName = (EditText) findViewById(R.id.lastName);
                  email = (EditText) findViewById(R.id.email);
@@ -102,7 +110,6 @@ public class FormActivity extends AppCompatActivity {
                  }
 
                  else{
-
                      StartLocationActivity();
                  }
 
@@ -138,6 +145,9 @@ public class FormActivity extends AppCompatActivity {
             Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        register.setVisibility(View.GONE);
+        relView.setVisibility(View.VISIBLE);
 
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
@@ -193,6 +203,8 @@ public class FormActivity extends AppCompatActivity {
                         {
                             Toast.makeText(FormActivity.this,response.body().toString(),Toast.LENGTH_SHORT).show();
 
+                            register.setVisibility(View.VISIBLE);
+                            relView.setVisibility(View.INVISIBLE);
                         }
 
 
@@ -227,6 +239,7 @@ public class FormActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

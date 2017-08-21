@@ -416,7 +416,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:padding="5dp"
-                    android:max="15"
+                    android:max="30"
                     />
 
                 <View

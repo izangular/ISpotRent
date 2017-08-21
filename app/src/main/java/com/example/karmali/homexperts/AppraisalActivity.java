@@ -327,9 +327,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         roomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int roomNo, boolean fromUser) {
-                double rooms = ((double) roomNo);
-                textViewRoomsVal.setText(String.valueOf(roomNo));
-                textViewroomsValueThumb.setText(String.valueOf(roomNo));
+                double rooms = ((double) roomNo)/2;
+                textViewRoomsVal.setText(String.valueOf(rooms));
+                textViewroomsValueThumb.setText(String.valueOf(rooms));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -495,8 +495,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                 livserfacevalue.setText(surface);
                                 seekBarLivSurf.setProgress(Integer.parseInt(surface));
 
-                                textViewRoomsVal.setText(roomNo);
-                                int roomInt = (int)Math.round(Float.parseFloat(roomNo));
+
+                                int roomInt = (int) (Float.parseFloat(roomNo) * 2);
                                 seekBarRooms.setProgress(roomInt);
 
                                 if (!year.equals(null)) {
@@ -631,7 +631,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                                     livserfacevalue.setText(surface);
                                     seekBarLivSurf.setProgress(Integer.parseInt(surface));
                                     textViewRoomsVal.setText(roomNo);
-                                    int roomInt = (int) Float.parseFloat(roomNo);
+
+                                    int roomInt = (int) (Float.parseFloat(roomNo) * 2);
                                     seekBarRooms.setProgress(roomInt);
 
                                     if (!object.equals(null)) {
@@ -744,11 +745,12 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     }
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-        int maxScroll = appBarLayout.getTotalScrollRange();
-        float percentage = (float) Math.abs(offset) / (float) maxScroll;
 
-        handleAlphaOnTitle(percentage);
-        handleToolbarTitleVisibility(percentage);
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
     }
 
     private void handleToolbarTitleVisibility(float percentage) {

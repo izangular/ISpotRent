@@ -128,7 +128,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     Button buttonA3, buttonA2;
     Button estimate;
     ArrayAdapter<String> adapter, adapterObjectType;
-    private ProgressBar bar;
+    private ImageView imageViewCapturedImage;
 
     Bitmap imageBitmap;
     ProgressDialog dialog;
@@ -145,6 +145,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private boolean sentToSettings = false;
     private SharedPreferences permissionStatus;
     private GoogleMap mGoogleMap;
+    private ProgressBar progressBarAppraisal;
+    private ProgressBar progressBarAppraisalHeader;
     ////////////////////////
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
@@ -213,19 +215,13 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         startAlphaAnimation(meter_squarethumb,0,View.INVISIBLE);
         ///////////
         txtAddress = findViewById(R.id.addressText);
-        dialog = new ProgressDialog(AppraisalActivity.this);
-        dialog.setIndeterminate(true);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
-        dialog.setMessage("Calculating Rent");
-        dialog.show();
-
+        progressBarAppraisal = findViewById(R.id.progressBarAppraisal);
+        progressBarAppraisal.setVisibility(View.INVISIBLE);
+        progressBarAppraisalHeader = findViewById(R.id.progressBarAppraisalHeader);
+        progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
 
         Bundle bun = getIntent().getExtras();
-        String savedImageUrl = bun.getString("PhotoUrl");
-        fillImageView(savedImageUrl);
+        final String savedImageUrl = bun.getString("PhotoUrl");
 
         yearspin = (Spinner) findViewById(R.id.yearspin);
         objectTypeSpinner = (Spinner) findViewById(R.id.objectTypeSpinner);
@@ -243,8 +239,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         textViewroomsValueThumb = (TextView) findViewById(R.id.textViewroomsValueThumb);
         getAddress();
-        //commented because it hangs
-        defaultAppraisal(savedImageUrl);
 
         //  ImageView img = (ImageView) findViewById(R.id.gotoloacationactivity);
 
@@ -360,6 +354,17 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         });
 
 
+        imageViewCapturedImage = findViewById(R.id.capturedImageView);
+        imageViewCapturedImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                fillImageView(savedImageUrl);
+                imageViewCapturedImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        //fillImageView(savedImageUrl);
+        //defaultAppraisal(savedImageUrl);
 
         MapFragment mapFragment=(MapFragment)getFragmentManager().findFragmentById(R.id.mapViewCurrentLocation);
         mapFragment.getMapAsync(this);
@@ -388,31 +393,32 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private void fillImageView(String savedImageUrl) {
         try {
             Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
-            //Toast.makeText(this, "Data: " + tempUri.toString(), Toast.LENGTH_SHORT).show();
             imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
-            ImageView imageView = (ImageView)findViewById(R.id.capturedImageView);
             ImageView capturedImageThumb  = (ImageView) findViewById(R.id.capturedImageThumb);
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 450, 330, false));
+            imageViewCapturedImage.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, imageViewCapturedImage.getWidth(), imageViewCapturedImage.getHeight(), false));
             capturedImageThumb.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 150, 120, false));
-            //imageView.setImageBitmap(imageBitmap);
-            //GetLocation();
+
+            defaultAppraisal(savedImageUrl);
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void defaultAppraisal(String savedImageUrl) {
         try {
+
             okHttpClient = new OkHttpClient();
 
             if (!isNetworkAvailable()) {
                 Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
 
+            progressBarAppraisal.setVisibility(View.VISIBLE);
+            if(mIsTheTitleVisible) progressBarAppraisalHeader.setVisibility(View.VISIBLE);
+
+            Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int nh = (int) (imageBitmap.getHeight() * (512.0 / imageBitmap.getWidth()));
@@ -518,9 +524,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
                                 txtAppraisePrice.setText(localeFormattedNumber);
                                 textViewAppraiseValueThumb.setText(localeFormattedNumber);
-                                dialog.dismiss();
 
-
+                                progressBarAppraisal.setVisibility(View.INVISIBLE);
+                                progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
                             }
                         });
                     } catch (Exception e) {
@@ -543,6 +549,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            progressBarAppraisal.setVisibility(View.VISIBLE);
+            if(mIsTheTitleVisible) progressBarAppraisalHeader.setVisibility(View.VISIBLE);
 
             TextView roomNb = (TextView) findViewById(R.id.textViewRoomsVal);
             TextView surfaceLiving = (TextView) findViewById(R.id.textViewLivSurfVal);
@@ -657,6 +666,9 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
                                     txtAppraisePrice.setText(localeFormattedNumber);
                                     textViewAppraiseValueThumb.setText(localeFormattedNumber);
+
+                                    progressBarAppraisal.setVisibility(View.INVISIBLE);
+                                    progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
                                 }
                             });
 
@@ -781,6 +793,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 startAlphaAnimation(maintextviewsurfacetitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 startAlphaAnimation(meter_squarethumb, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mToolbar.setBackgroundColor(0x00000000);
+                progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
                 mIsTheTitleVisible = false;
             }
         }

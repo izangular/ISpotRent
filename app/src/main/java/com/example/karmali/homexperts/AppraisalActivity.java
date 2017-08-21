@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +39,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
@@ -160,6 +162,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private  ImageView mImage;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
+    private Drawable BARS_DEFAULT_SURFACE, BARS_DEFAULT_ROOMS;
 /////////////
 
     @Override
@@ -318,6 +321,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         });
 
         roomSeekBar = (SeekBar) findViewById(R.id.seekBarRooms);
+        BARS_DEFAULT_ROOMS = ContextCompat.getDrawable(AppraisalActivity.this.getApplicationContext(), R.drawable.round_button);
+        roomSeekBar.setThumb(BARS_DEFAULT_ROOMS);
         roomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int roomNo, boolean fromUser) {
@@ -336,6 +341,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
         });
 
         surfaceSeekBar = (SeekBar) findViewById(R.id.seekBarLivSurf);
+        BARS_DEFAULT_SURFACE = ContextCompat.getDrawable(AppraisalActivity.this.getApplicationContext(), R.drawable.round_button);
+        surfaceSeekBar.setThumb(BARS_DEFAULT_SURFACE);
         surfaceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {

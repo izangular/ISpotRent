@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.karmali.homexperts.AppraisalActivity"
-    tools:ignore="RtlHardcoded"
-    >
-
+    tools:ignore="RtlHardcoded">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main.appbar"
@@ -20,7 +18,7 @@
             android:id="@+id/main.collapsing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
             <FrameLayout
                 android:id="@+id/main.framelayout.title"

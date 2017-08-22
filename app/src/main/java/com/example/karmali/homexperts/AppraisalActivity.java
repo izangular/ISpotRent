@@ -133,8 +133,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private ImageView imageViewCapturedImage;
 
     Bitmap imageBitmap;
-    ProgressDialog dialog;
-    private String requestZip,requestTown, requestStreet, requestCategory,requestlift="0",requestaddres,requestqualityMicro,requestortId;
+    private String requestZip,requestTown, requestStreet, requestCategory="6",requestlift="0",requestaddres,requestqualityMicro,requestortId;
 
     String userAddress;
     LatLng userAddressLatLng;
@@ -150,7 +149,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private ProgressBar progressBarAppraisal;
     private ProgressBar progressBarAppraisalHeader;
     ////////////////////////
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.7f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
 
@@ -614,7 +613,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
                 okHttpClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        dialog.dismiss();
+                        progressBarAppraisal.setVisibility(View.INVISIBLE);
+                        progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
                         Log.i("IN", e.getMessage());
                     }
 

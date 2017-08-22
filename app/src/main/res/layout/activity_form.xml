@@ -40,7 +40,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="40dp"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/rentxperts_logo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                     android:textAllCaps="false"
                     android:background="@drawable/button"
                     android:gravity="center"
-                    android:text="REGISTER"
+                    android:text="Register"
                     android:textColor="#fff" />
 
                 <RelativeLayout

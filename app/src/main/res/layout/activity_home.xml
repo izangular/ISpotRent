@@ -22,7 +22,7 @@
             android:layout_above="@+id/subtitle"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="23dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/rentxperts_logo" />
 
         <TextView
             android:id="@+id/subtitle"

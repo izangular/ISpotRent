@@ -16,6 +16,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/colorAccent"
+        android:textAllCaps="false"
         android:text="Enable location service"
         app:layout_constraintBottom_toTopOf="@+id/textViewNo"
         app:layout_constraintHorizontal_bias="0.0"

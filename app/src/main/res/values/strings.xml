@@ -114,6 +114,9 @@
     <string name="net_liv_area">Net living area</string>
     <string name="meter_square">(m<small><sup>2</sup></small>)</string>
     <string name="meter_squarethumb">m<small><sup>2</sup></small></string>
+    <string name="appraisal_message">Looks like your picture is not proper Real Estate property picture.\n\nOur image processing tools says picture looks like of %1$s.\n\nPlease click proper picture and valuate again.</string>
+<string name="please_wait">Please wait while we get default appraisal for you.</string>
+
 
 </resources>
 

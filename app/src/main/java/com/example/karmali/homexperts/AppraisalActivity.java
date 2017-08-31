@@ -224,6 +224,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         Bundle bun = getIntent().getExtras();
         final String savedImageUrl = bun.getString("PhotoUrl");
+        final String data = bun.getString("defValues");
 
         yearspin = (Spinner) findViewById(R.id.yearspin);
         objectTypeSpinner = (Spinner) findViewById(R.id.objectTypeSpinner);
@@ -255,6 +256,8 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         Spinner spinYear = (Spinner)findViewById(R.id.yearspin);
         spinYear.setAdapter(adapter);
+
+        adapterObjectType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
 
 
         /* Bitmap bitmap = (Bitmap) this.getIntent().getParcelableExtra("BitmapImage");
@@ -297,14 +300,6 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             }
 
         });
-
-        //Bundle bun = getIntent().getExtras();
-        // String savedImageUrl = bun.getString("PhotoUrl");
-   /*     img.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                goToLocation();
-            }
-        });*/
 
         liftCheckBox =(CheckBox) findViewById(R.id.lift);
         lift.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -371,6 +366,7 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
 
         //fillImageView(savedImageUrl);
         //defaultAppraisal(savedImageUrl);
+        SetDefaultValues(data);
 
         MapFragment mapFragment=(MapFragment)getFragmentManager().findFragmentById(R.id.mapViewCurrentLocation);
         mapFragment.getMapAsync(this);
@@ -404,312 +400,257 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
             imageViewCapturedImage.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, imageViewCapturedImage.getWidth(), imageViewCapturedImage.getHeight(), false));
             capturedImageThumb.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 150, 120, false));
 
-            defaultAppraisal(savedImageUrl);
+           // defaultAppraisal(savedImageUrl);
         }
         catch (Exception ex) {
             Toast.makeText(this, "Error: "+ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void defaultAppraisal(String savedImageUrl) {
-        try {
+    public void SetDefaultValues(String defaultData)
+    {
+        try
+        {
+            final JSONObject json = new JSONObject(defaultData);
+            final String category = json.getString("categoryCode");
 
-            okHttpClient = new OkHttpClient();
-
-            if (!isNetworkAvailable()) {
-                Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            progressBarAppraisal.setVisibility(View.VISIBLE);
-            if(mIsTheTitleVisible) progressBarAppraisalHeader.setVisibility(View.VISIBLE);
-
-            Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            int nh = (int) (imageBitmap.getHeight() * (512.0 / imageBitmap.getWidth()));
-            Bitmap small = Bitmap.createScaledBitmap(imageBitmap, 512, nh, true);
-            small.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String imageBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            final String appvalue = json.getString("appraisalValue");
+            final String surface = json.getString("surfaceContract");
+            final String liftValue = json.getString("lift");
+            final String year = json.getString("buildYear");
+            final String roomNo = json.getString("roomNb");
+            final String object = json.getString("objectType");
+            requestZip = json.getString("zip");
+            requestTown = json.getString("town");
+            requestStreet = json.getString("street");
+            requestaddres = requestStreet + ", " + requestZip + " " + requestTown;
+            requestqualityMicro = json.getString("qualityMicro");
+            requestortId = json.getString("ortId");
 
 
-            deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            ;// "123XGH67";
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setGroupingSeparator('\'');
+            DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
+            final  String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
 
-            RequestBody formBody = new FormBody.Builder()
-                    .add("imageBase64", imageBase64)
-                    .add("lat",String.valueOf(userAddressLatLng.latitude))
-                    .add("lng",String.valueOf(userAddressLatLng.longitude))
-                    .add("deviceId", deviceId.toString())
-                    .build();
-            request = new Request.Builder().url(UrlDefaultAppraise).build();
-
-            request = new Request.Builder()
-                    .url(UrlDefaultAppraise)
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .post(formBody)
-                    .build();
-
-            //Toast.makeText(AppraisalActivity.this, "Before", Toast.LENGTH_SHORT).show();
-            okHttpClient.newCall(request).enqueue(new Callback() {
+            runOnUiThread(new Runnable() {
 
                 @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.i("IN", e.getMessage());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    try {
-
-                        final String myResponse = response.body().string();
-                        Log.i("IN", myResponse);
-                        final JSONObject json = new JSONObject(myResponse);
-                        final String category = json.getString("categoryCode");
-
-                        final String appvalue = json.getString("appraisalValue");
-                        final String surface = json.getString("surfaceContract");
-                        final String liftValue = json.getString("lift");
-                        final String year = json.getString("buildYear");
-                        final String roomNo = json.getString("roomNb");
-                        final String object = json.getString("objectType");
-                        requestZip = json.getString("zip");
-                        requestTown = json.getString("town");
-                        requestStreet = json.getString("street");
-                        requestaddres = requestStreet + ", " + requestZip + " " + requestTown;
-                        requestqualityMicro = json.getString("qualityMicro");
-                        requestortId = json.getString("ortId");
+                public void run() {
 
 
-                        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-                        symbols.setGroupingSeparator('\'');
-                        DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
-                            final  String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
+                    txtAddress.setText(requestaddres);
 
-                        runOnUiThread(new Runnable() {
+                    //Spinner For Object Type
+                    adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
 
-                            @Override
-                            public void run() {
-
-
-                                txtAddress.setText(requestaddres);
-
-                                //Spinner For Object Type
-                                adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
-                                objectTypeSpinner.setAdapter(adapterObjectType);
-                                if (!object.equals(null)) {
-                                    int spinnerPosition = adapter.getPosition(object);
-                                    objectTypeSpinner.setSelection(spinnerPosition);
-                                }
-
-                                livserfacevalue.setText(surface);
-                                seekBarLivSurf.setProgress(Integer.parseInt(surface));
-
-
-                                int roomInt = (int) (Float.parseFloat(roomNo) * 2);
-                                seekBarRooms.setProgress(roomInt);
-
-                                if (!year.equals(null)) {
-                                    int spinnerPosition = adapter.getPosition(year);
-                                    yearspin.setSelection(spinnerPosition);
-                                }
-
-                                if (liftValue.trim().equals("1"))
-                                    lift.setChecked(true);
-                                else
-                                    lift.setChecked(false);
-
-                                if (category.trim().equals("5")) {
-                                    buttonA2.performClick();
-                                } else {
-                                    buttonA3.performClick();
-                                }
-
-
-                                txtAppraisePrice.setText(localeFormattedNumber);
-                                textViewAppraiseValueThumb.setText(localeFormattedNumber);
-
-                                progressBarAppraisal.setVisibility(View.INVISIBLE);
-                                progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                    } catch (Exception e) {
-                        Toast.makeText(AppraisalActivity.this, "1.Error", Toast.LENGTH_SHORT).show();
-                        Log.i("error", e.getMessage());
+                    objectTypeSpinner.setAdapter(adapterObjectType);
+                    if (!object.equals(null)) {
+                        int spinnerPosition = adapterObjectType.getPosition(object);
+                        objectTypeSpinner.setSelection(spinnerPosition);
                     }
+
+                    livserfacevalue.setText(surface);
+                    seekBarLivSurf.setProgress(Integer.parseInt(surface));
+
+
+                    int roomInt = (int) (Float.parseFloat(roomNo) * 2);
+                    seekBarRooms.setProgress(roomInt);
+
+                    if (!year.equals(null)) {
+                        int spinnerPosition = adapter.getPosition(year);
+                        yearspin.setSelection(spinnerPosition);
+                    }
+
+                    if (liftValue.trim().equals("1"))
+                        lift.setChecked(true);
+                    else
+                        lift.setChecked(false);
+
+                    if (category.trim().equals("5")) {
+                        buttonA2.performClick();
+                    } else {
+                        buttonA3.performClick();
+                    }
+
+
+                    txtAppraisePrice.setText(localeFormattedNumber);
+                    textViewAppraiseValueThumb.setText(localeFormattedNumber);
+
+                    progressBarAppraisal.setVisibility(View.INVISIBLE);
+                    progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
                 }
             });
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
+
         }
+
     }
-
-    private void AppraisalService() {
-        try {
-            if (!isNetworkAvailable()) {
-                Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            progressBarAppraisal.setVisibility(View.VISIBLE);
-            if(mIsTheTitleVisible) progressBarAppraisalHeader.setVisibility(View.VISIBLE);
-
-            TextView roomNb = (TextView) findViewById(R.id.textViewRoomsVal);
-            TextView surfaceLiving = (TextView) findViewById(R.id.textViewLivSurfVal);
-            deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            ;// "123XGH67";
-            Spinner spinner = (Spinner) findViewById(R.id.yearspin);
-            String buildYear = spinner.getSelectedItem().toString();
-
-
-            Spinner objectspinner = (Spinner) findViewById(R.id.objectTypeSpinner);
-            String objectType = objectspinner.getSelectedItem().toString();
-
-            //Spinner For Object Type
-            adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
-            objectTypeSpinner.setAdapter(adapterObjectType);
-
-            int spinnerPosition = adapterObjectType.getPosition(objectType);
-            objectTypeSpinner.setSelection(spinnerPosition);
-
-
-            String values[] = getResources().getStringArray(R.array.android_dropdown_objectValue);
-
-            String value = values[spinnerPosition];
-
-            RequestBody appraiseData = new FormBody.Builder()
-                    .add("ortId", requestortId)
-                    .add("categoryCode", requestCategory)
-                    .add("objectTypeCode", value)
-                    .add("qualityMicro", requestqualityMicro)
-                    .add("surfaceContract", surfaceLiving.getText().toString())
-                    .add("buildYear", buildYear)
-                    .add("roomNb", roomNb.getText().toString())
-                    .add("lift", requestlift)
-                    .add("deviceId", deviceId.toString())
-                    .add("address.address",requestaddres)
-                    .add("address.lat",String.valueOf(userAddressLatLng.latitude) )
-                    .add("address.lng", String.valueOf(userAddressLatLng.longitude))
-                    .add("address.street",requestStreet)
-                    .add("address.zip",requestZip)
-                    .add("address.town",requestTown)
-                    .add("address.country", "Switzerland")
-                    .build();
-
-            okHttpClient = new OkHttpClient();
-            request = new Request.Builder().url(UrlAppraise).build();
-            request = new Request.Builder().url(UrlAppraise)
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .post(appraiseData)
-                    .build();
-            try {
-
-                okHttpClient.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        progressBarAppraisal.setVisibility(View.INVISIBLE);
-                        progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
-                        Log.i("IN", e.getMessage());
+            private void AppraisalService() {
+                try {
+                    if (!isNetworkAvailable()) {
+                        Toast.makeText(this, "No network", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        try {
-                            final String myResponse = response.body().string();
+                    progressBarAppraisal.setVisibility(View.VISIBLE);
+                    if (mIsTheTitleVisible) progressBarAppraisalHeader.setVisibility(View.VISIBLE);
 
-                            final JSONObject json = new JSONObject(myResponse);
-                            final String appvalue = json.getString("appraisalValue");
-                            final String surface = json.getString("surfaceContract");
-                            final String liftValue = json.getString("lift");
-                            final String category = json.getString("categoryCode");
-                            final String object = json.getString("objectType");
-                            final String year = json.getString("buildYear");
-                            final String roomNo = json.getString("roomNb");
-                            requestZip = json.getString("zip");
-                            requestTown = json.getString("town");
-                            requestStreet = json.getString("street");
-                            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-                            symbols.setGroupingSeparator('\'');
-                            DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
-                            final  String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    txtAddress.setText(requestStreet + ", " + requestZip + " " + requestTown );
-
-                                    livserfacevalue.setText(surface);
-                                    seekBarLivSurf.setProgress(Integer.parseInt(surface));
-                                    textViewRoomsVal.setText(roomNo);
-
-                                    int roomInt = (int) (Float.parseFloat(roomNo) * 2);
-                                    seekBarRooms.setProgress(roomInt);
-
-                                    if (!object.equals(null)) {
-                                        int spinnerPosition = adapter.getPosition(object);
-                                        objectTypeSpinner.setSelection(spinnerPosition);
-                                    }
+                    TextView roomNb = (TextView) findViewById(R.id.textViewRoomsVal);
+                    TextView surfaceLiving = (TextView) findViewById(R.id.textViewLivSurfVal);
+                    deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    ;// "123XGH67";
+                    Spinner spinner = (Spinner) findViewById(R.id.yearspin);
+                    String buildYear = spinner.getSelectedItem().toString();
 
 
-                                    if (!year.equals(null)) {
-                                        int spinnerPosition = adapter.getPosition(year);
-                                        yearspin.setSelection(spinnerPosition);
-                                    }
+                    Spinner objectspinner = (Spinner) findViewById(R.id.objectTypeSpinner);
+                    String objectType = objectspinner.getSelectedItem().toString();
+
+                    //Spinner For Object Type
+                    adapterObjectType = new ArrayAdapter<String>(AppraisalActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.android_dropdown_objectType));
+                    objectTypeSpinner.setAdapter(adapterObjectType);
+
+                    int spinnerPosition = adapterObjectType.getPosition(objectType);
+                    objectTypeSpinner.setSelection(spinnerPosition);
+
+
+                    String values[] = getResources().getStringArray(R.array.android_dropdown_objectValue);
+
+                    String value = values[spinnerPosition];
+
+                    RequestBody appraiseData = new FormBody.Builder()
+                            .add("ortId", requestortId)
+                            .add("categoryCode", requestCategory)
+                            .add("objectTypeCode", value)
+                            .add("qualityMicro", requestqualityMicro)
+                            .add("surfaceContract", surfaceLiving.getText().toString())
+                            .add("buildYear", buildYear)
+                            .add("roomNb", roomNb.getText().toString())
+                            .add("lift", requestlift)
+                            .add("deviceId", deviceId.toString())
+                            .add("address.address", requestaddres)
+                            .add("address.lat", String.valueOf(userAddressLatLng.latitude))
+                            .add("address.lng", String.valueOf(userAddressLatLng.longitude))
+                            .add("address.street", requestStreet)
+                            .add("address.zip", requestZip)
+                            .add("address.town", requestTown)
+                            .add("address.country", "Switzerland")
+                            .build();
+
+                    okHttpClient = new OkHttpClient();
+                    request = new Request.Builder().url(UrlAppraise).build();
+                    request = new Request.Builder().url(UrlAppraise)
+                            .header("Accept", "application/json")
+                            .header("Content-Type", "application/x-www-form-urlencoded")
+                            .post(appraiseData)
+                            .build();
+                    try {
+
+                        okHttpClient.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                progressBarAppraisal.setVisibility(View.INVISIBLE);
+                                progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
+                                Log.i("IN", e.getMessage());
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    final String myResponse = response.body().string();
+
+                                    final JSONObject json = new JSONObject(myResponse);
+                                    final String appvalue = json.getString("appraisalValue");
+                                    final String surface = json.getString("surfaceContract");
+                                    final String liftValue = json.getString("lift");
+                                    final String category = json.getString("categoryCode");
+                                    final String object = json.getString("objectType");
+                                    final String year = json.getString("buildYear");
+                                    final String roomNo = json.getString("roomNb");
+                                    requestZip = json.getString("zip");
+                                    requestTown = json.getString("town");
+                                    requestStreet = json.getString("street");
+                                    DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                                    symbols.setGroupingSeparator('\'');
+                                    DecimalFormat decimalFormat = new DecimalFormat("#,### CHF", symbols);
+                                    final String localeFormattedNumber = decimalFormat.format(Integer.parseInt(appvalue));
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            txtAddress.setText(requestStreet + ", " + requestZip + " " + requestTown);
+
+                                            livserfacevalue.setText(surface);
+                                            seekBarLivSurf.setProgress(Integer.parseInt(surface));
+                                            textViewRoomsVal.setText(roomNo);
+
+                                            int roomInt = (int) (Float.parseFloat(roomNo) * 2);
+                                            seekBarRooms.setProgress(roomInt);
+
+                                            if (!object.equals(null)) {
+                                                int spinnerPosition = adapter.getPosition(object);
+                                                objectTypeSpinner.setSelection(spinnerPosition);
+                                            }
+
+
+                                            if (!year.equals(null)) {
+                                                int spinnerPosition = adapter.getPosition(year);
+                                                yearspin.setSelection(spinnerPosition);
+                                            }
                                    /* if (liftValue.trim().equals("1"))
                                         lift.setChecked(true);
                                     else
                                         lift.setChecked(false);*/
 
-                                    if (category.trim().equals("5"))
-                                        buttonA2.performClick();
-                                    else
-                                        buttonA3.performClick();
+                                            if (category.trim().equals("5"))
+                                                buttonA2.performClick();
+                                            else
+                                                buttonA3.performClick();
 
-                                    txtAppraisePrice.setText(localeFormattedNumber);
-                                    textViewAppraiseValueThumb.setText(localeFormattedNumber);
+                                            txtAppraisePrice.setText(localeFormattedNumber);
+                                            textViewAppraiseValueThumb.setText(localeFormattedNumber);
 
-                                    progressBarAppraisal.setVisibility(View.INVISIBLE);
-                                    progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
+                                            progressBarAppraisal.setVisibility(View.INVISIBLE);
+                                            progressBarAppraisalHeader.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+
+                                } catch (Exception e) {
+                                    Log.i("error", e.getMessage());
                                 }
-                            });
-
-                        } catch (Exception e) {
-                            Log.i("error", e.getMessage());
-                        }
+                            }
+                        });
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
-                });
-            } catch (Exception e) {
-                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                } catch (Exception outerEx) {
+                    Toast.makeText(this, "Error:" + outerEx.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
-        }catch(Exception outerEx){
-            Toast.makeText(this, "Error:"+outerEx.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (sentToSettings) {
-            if (ActivityCompat.checkSelfPermission(AppraisalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                //Got Permission
-                //Toast.makeText(getBaseContext(), "Returned from settings. Permission granted", Toast.LENGTH_LONG).show();
+            private boolean isNetworkAvailable() {
+                ConnectivityManager connectivityManager
+                        = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
             }
-        }
-    }
+
+            @Override
+            protected void onPostResume() {
+                super.onPostResume();
+                if (sentToSettings) {
+                    if (ActivityCompat.checkSelfPermission(AppraisalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        //Got Permission
+                        //Toast.makeText(getBaseContext(), "Returned from settings. Permission granted", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {

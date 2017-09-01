@@ -178,6 +178,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                                 for (Location location : locationResult.getLocations()) {
                                     // Update UI with location data
                                     mCurrentLocation = location;
+                                    setCurrentAddress();
                                 /*if (mCurrLocationMarker != null) {
                                     mCurrLocationMarker.remove();
                                 }*/
@@ -345,11 +346,10 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private void setCurrentAddress(Address address){
+    private void setCurrentAddress(){
         try {
             //txtCurrentAddress.setText(address.getAddressLine(0) + ", " + address.getAddressLine(1));
             final AddressGlobal addressGlobal = (AddressGlobal)getApplicationContext();
-            addressGlobal.setAddress(address.getAddressLine(0) + ", " + address.getAddressLine(1));
             addressGlobal.setAddressLatLng(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
         }
         catch(Exception ex){
@@ -427,7 +427,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                             @Override
                             public void run() {
                                 //txtCurrentAddress.setText("Merces" + ", " + address.getPostalCode() + ", " + address.getLocality());
-                                setCurrentAddress(address);
+                                setCurrentAddress();
                             }
                         }
                 );

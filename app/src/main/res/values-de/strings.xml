@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">rentXperts</string>
+    <string name="google_map_api_key">AIzaSyBUJXJGghtR5vTFeIFAljrdKtEdd4aqWeM</string>
+    <string-array name="android_dropdown_objectType">
+        <item>Normal Flat</item>
+        <item>Furnished Apartment</item>
+        <item>Duplex</item>
+        <item>Terrace Apartment</item>
+        <item>Penthhouse</item>
+        <item>Attic</item>
+        <item>Studio</item>
+        <item>Loft</item>
+        <item>House</item>
+    </string-array>
+
+    <string-array name="android_dropdown_objectValue">
+        <item>21</item>
+        <item>15</item>
+        <item>13</item>
+        <item>1099</item>
+        <item>2</item>
+        <item>5</item>
+        <item>16</item>
+        <item>100</item>
+        <item>1199</item>
+    </string-array>
+    <string name="title_activity_show_image">ShowImageActivity</string>
+    <string name="buttonConfirmImage">Confirm Image</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="multi_select_list_preference_default_value" />
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="key_contact_us">kontaktiere uns</string>
+    <string name="title_language">Sprache</string>
+    <string name="url_company">www.iazi.ch</string>
+    <string name="privacy_policy">Datenschutz-Bestimmungen</string>
+    <string name="title_terms">Geschäftsbedingungen</string>
+    <string name="title_version">Version</string>
+    <string name="app_version">1.0</string>
+    <string name="key_upload_quality">key_upload_quality</string>
+    <string name="pref_header_about">About</string>
+    <string name="summary_choose_ringtone">Choose notification sound</string>
+    <string name="choose_email_client">Choose email client</string>
+    <string name="net_liv_area">Netto-Wohnbereich</string>
+    <string name="meter_square">(m<small><sup>2</sup></small>)</string>
+    <string name="meter_squarethumb">m<small><sup>2</sup></small></string>
+    <string name="appraisal_message">Sieht aus wie Ihr Bild ist nicht richtig Immobilien-Image.\n\nUnsere Bildverarbeitungs-Tools sagt, das Bild sieht aus %1$s.\n\nBitte klicken Sie auf das richtige Bild und bewerten Sie es erneut.</string>
+    <string name="please_wait">Bitte warten Sie, während wir die Standardbewertung für Sie erhalten.</string>
+    <string name="location_setting_message">Wir benötigen Ihren Standort, um Ihnen bessere Dienstleistungen zu bieten. Bitte aktivieren Sie den Standort.</string>
+    <string name="location_do_not_allow">Nicht zulassen</string>
+    <string name="access_your_location">ZUGANG IHREN STANDORT</string>
+    <string name="button_enable_location_service">Standortdienst aktivieren</string>
+    <string name="capture_photo">Capture photo</string>
+    <string name="text_click_photo_property">Click a photo of your property</string>
+    <string name="map_of_location">Map of location</string>
+    <string name="button_estimate">Estimate</string>
+
+    <string name="address">Address:</string>
+    <string name="est_value">Est.Value:</string>
+    <string name="house_type">House Type</string>
+    <string name="single_family_house">Single Family House</string>
+    <string name="condominium">Condominium</string>
+    <string name="type_of_property">Type of your property</string>
+    <string name="type">Type</string>
+    <string name="rooms">Rooms</string>
+    <string name="zero">0</string>
+    <string name="room_high">15</string>
+    <string name="surf_high">500</string>
+    <string name="low_1">1</string>
+    <string name="buildyear_renov">Year of construction or last major renovation</string>
+    <string name="year">Year</string>
+    <string name="lift">Lift</string>
+    <string name="surface">Surface:</string>
+    <string name="rooms_top">Rooms:</string>
+</resources>

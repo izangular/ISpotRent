@@ -55,7 +55,7 @@
                         android:paddingLeft="5dp"
                         android:alpha="0.7"
                         android:paddingTop="2dp"
-                        android:text="Address:"
+                        android:text="@string/address"
                         android:textColor="#fff"
                         android:background="@color/colorPrimary"
                         />
@@ -74,7 +74,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="1dp"
-                            android:text="Est.Value:"
+                            android:text="@string/est_value"
                             android:textSize="16dp"
                             android:ellipsize="end"
                             android:textColor="#fff"
@@ -147,7 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="House Type"
+                        android:text="@string/house_type"
                         android:textColor="@color/input_text_gray" />
                 </LinearLayout>
 
@@ -170,7 +170,7 @@
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
                         android:background="@color/colorAccent"
-                        android:text="Single Family House"
+                        android:text="@string/single_family_house"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -181,7 +181,7 @@
                         android:layout_height="30dp"
                         android:layout_weight="0.5"
                         android:background="@drawable/borderbottom"
-                        android:text="Condominium"
+                        android:text="@string/condominium"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/colorAccent" />
@@ -204,7 +204,7 @@
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Type of your property"
+                        android:text="@string/type_of_property"
                         android:layout_weight="1"
                         android:textColor="@color/input_text_gray" />
 
@@ -224,7 +224,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Type"
+                        android:text="@string/type"
                         android:textColor="#000" />
 
                     <RelativeLayout
@@ -285,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="#000"
                         android:textSize="@dimen/text_big"
                         android:textStyle="bold" />
@@ -314,7 +314,7 @@
                         android:id="@+id/textViewLivSurfRangeLow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="@string/low_1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
               <!--      <TextView
@@ -332,7 +332,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="500"
+                        android:text="@string/surf_high"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
                 </LinearLayout>
@@ -365,7 +365,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Rooms"
+                        android:text="@string/rooms"
                         android:textColor="@color/input_text_gray"/>
 
                     <TextView
@@ -374,7 +374,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="0"
+                        android:text="@string/zero"
                         android:textColor="#000"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -394,7 +394,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1"
+                        android:text="@string/low_1"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
 
@@ -405,7 +405,7 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:paddingEnd="5dp"
-                        android:text="15"
+                        android:text="@string/room_high"
                         android:textColor="#000"
                         android:textSize="@dimen/text_small" />
                 </LinearLayout>
@@ -439,7 +439,7 @@
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Year of construction or last major renovation"
+                        android:text="@string/buildyear_renov"
                         android:textColor="@color/input_text_gray" />
                 </LinearLayout>
 
@@ -457,7 +457,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Year"
+                        android:text="@string/year"
                         android:textColor="#000" />
 
                     <RelativeLayout
@@ -491,7 +491,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Lift"
+                    android:text="@string/lift"
                     android:layout_marginBottom="10dp"
                     android:layout_marginStart="10dp"
                     android:textColor="#000"
@@ -514,7 +514,7 @@
                         android:id="@+id/mapHeaderText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Map of location"
+                        android:text="@string/map_of_location"
                         android:textColor="@color/input_text_gray" />
                 </LinearLayout>
 
@@ -579,7 +579,7 @@
                         android:id="@+id/main.textview.pricetitle"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Est.Value:"
+                        android:text="@string/est_value"
                         android:textSize="14sp"
                         android:textColor="#fff"
                         />
@@ -604,7 +604,7 @@
                         android:id="@+id/maintextviewsurfacetitle"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Surface:"
+                        android:text="@string/surface"
                         android:textSize="14sp"
                         android:layout_weight="1"
                         android:textColor="#fff"
@@ -637,7 +637,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
-                        android:text="Rooms:"
+                        android:text="@string/rooms_top"
                         android:layout_weight="1"
                         android:textSize="14sp"
                         android:textColor="#fff"
@@ -671,7 +671,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/colorAccent"
-            android:text="Estimate"
+            android:text="@string/button_estimate"
             android:textAllCaps="false"
             app:borderWidth="0dp"
             android:textColor="@color/white"

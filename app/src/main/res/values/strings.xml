@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">rentXperts</string>
-    <string name="google_map_api_key">AIzaSyCeTi7hXcUTL2Yg76iHo7HKtRRaLjVUHto</string>
+    <string name="google_map_api_key">AIzaSyBUJXJGghtR5vTFeIFAljrdKtEdd4aqWeM</string>
     <string-array name="android_dropdown_objectType">
         <item>Normal Flat</item>
         <item>Furnished Apartment</item>
@@ -12,6 +12,7 @@
         <item>Loft</item>
         <item>House</item>
     </string-array>
+
     <string-array name="android_dropdown_objectValue">
         <item>21</item>
         <item>15</item>
@@ -25,7 +26,6 @@
     </string-array>
     <string name="title_activity_show_image">ShowImageActivity</string>
     <string name="buttonConfirmImage">Confirm Image</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -41,64 +41,19 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
-
     <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
     <string-array name="multi_select_list_preference_default_value" />
-
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
-
     <string name="pref_title_new_message_notifications">New message notifications</string>
-
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
+
 
     <string name="key_contact_us">Contact Us</string>
     <string name="title_language">Language</string>
@@ -115,7 +70,32 @@
     <string name="meter_square">(m<small><sup>2</sup></small>)</string>
     <string name="meter_squarethumb">m<small><sup>2</sup></small></string>
     <string name="appraisal_message">Looks like your picture is not proper Real Estate property picture.\n\nOur image processing tools says picture looks like of %1$s.\n\nPlease click proper picture and valuate again.</string>
-<string name="please_wait">Please wait while we get default appraisal for you.</string>
+    <string name="please_wait">Please wait while we get default appraisal for you.</string>
+    <string name="location_setting_message">We will need your location to provide you better services. Please enable location.</string>
+    <string name="location_do_not_allow">Do not allow</string>
+    <string name="access_your_location">ACCESS YOUR LOCATION</string>
+    <string name="button_enable_location_service">Enable location service</string>
+    <string name="capture_photo">Capture photo</string>
+    <string name="text_click_photo_property">Click a photo of your property</string>
+    <string name="map_of_location">Map of location</string>
+    <string name="button_estimate">Estimate</string>
+    <string name="address">Address:</string>
+    <string name="est_value">Est.Value:</string>
+    <string name="house_type">House Type</string>
+    <string name="single_family_house">Single Family House</string>
+    <string name="condominium">Condominium</string>
+    <string name="type_of_property">Type of your property</string>
+    <string name="type">Type</string>
+    <string name="rooms">Rooms</string>
+    <string name="zero">0</string>
+    <string name="room_high">15</string>
+    <string name="surf_high">500</string>
+    <string name="low_1">1</string>
+    <string name="buildyear_renov">Year of construction or last major renovation</string>
+    <string name="year">Year</string>
+    <string name="lift">Lift</string>
+    <string name="surface">Surface:</string>
+    <string name="rooms_top">Rooms:</string>
 
 
 </resources>

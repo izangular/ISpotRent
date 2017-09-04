@@ -161,7 +161,7 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
 
         mBackButtonFlagHandler =new Handler();
 
-        getCurrentLocation();
+        //getCurrentLocation();
 
         MapFragment mapFragment=(MapFragment)getFragmentManager().findFragmentById(R.id.mapViewCurrentLocation);
         mapFragment.getMapAsync(this);
@@ -172,28 +172,9 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
                 try {
                     for (Location location : locationResult.getLocations()) {
                         // Update UI with location data
-                        mLocationCallback = new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                for (Location location : locationResult.getLocations()) {
-                                    // Update UI with location data
-                                    mCurrentLocation = location;
-                                    setCurrentAddress();
-                                /*if (mCurrLocationMarker != null) {
-                                    mCurrLocationMarker.remove();
-                                }*/
-                                    startGeocoderIntentService(location.getLatitude(), location.getLongitude());
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            setCurrentLocationOnMap();
-                                        }
-                                    });
-                                }
-                            }
-
-                            ;
-                        };
+                        mCurrentLocation = location;
+                        setCurrentLocationOnMap();
+                        setCurrentAddress();
                     }
                 }catch (Exception ex){
                     Toast.makeText(getBaseContext(), "Error getting location"+ex.toString(), Toast.LENGTH_LONG).show();
@@ -400,8 +381,8 @@ public class UserLocationActivity extends AppCompatActivity implements OnMapRead
     private void startLocationUpdates() {
         try {
             mLocationRequest = new LocationRequest();
-            mLocationRequest.setInterval(60000); // One minute interval
-            mLocationRequest.setFastestInterval(60000);
+            mLocationRequest.setInterval(10000); // One minute interval
+            mLocationRequest.setFastestInterval(10000);
             mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback,

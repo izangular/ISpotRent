@@ -15,6 +15,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -395,11 +397,19 @@ public class AppraisalActivity extends AppCompatActivity implements GoogleApiCli
     private void fillImageView(String savedImageUrl) {
         try {
             Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
+
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.centerCrop();
+            Glide.with(this).load(savedImageUrl).apply(requestOptions).into(imageViewCapturedImage);
+            ImageView capturedImageThumb  = (ImageView) findViewById(R.id.capturedImageThumb);
+            Glide.with(this).load(savedImageUrl).apply(requestOptions).into(capturedImageThumb);
+
+            /*
             imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
             ImageView capturedImageThumb  = (ImageView) findViewById(R.id.capturedImageThumb);
             imageViewCapturedImage.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, imageViewCapturedImage.getWidth(), imageViewCapturedImage.getHeight(), false));
             capturedImageThumb.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 150, 120, false));
-
+            */
            // defaultAppraisal(savedImageUrl);
         }
         catch (Exception ex) {

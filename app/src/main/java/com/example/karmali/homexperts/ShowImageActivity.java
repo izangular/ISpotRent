@@ -36,6 +36,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.GoogleMap;
@@ -360,12 +362,14 @@ public class ShowImageActivity extends AppCompatActivity {
     }
     private void fillImageView(String savedImageUrl) {
         try {
+            /*
             Uri tempUri = FileProvider.getUriForFile(this, "com.example.karmali.homexperts.fileprovider", new File(savedImageUrl));
-            //Toast.makeText(this, "Data: " + tempUri.toString(), Toast.LENGTH_SHORT).show();
             Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUri);
-            //imageView
             imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, imageView.getWidth(), imageView.getHeight(), false));
-            //imageView.setImageBitmap(imageBitmap);
+            */
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.centerCrop();
+            Glide.with(this).load(savedImageUrl).apply(requestOptions).into(imageView);
         }
         catch (Exception ex)
         {
